@@ -1,65 +1,75 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Fixed on Arthur Dent</title>
-    <link>http://localhost:1313/fixed/</link>
-    <description>Recent content in Fixed on Arthur Dent</description>
+    <title>Fixed on Aleksandr Guljajev</title>
+    <link>/fixed/</link>
+    <description>Recent content in Fixed on Aleksandr Guljajev</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
     <lastBuildDate>Sat, 22 Aug 2015 06:42:21 -0700</lastBuildDate>
-    <atom:link href="http://localhost:1313/fixed/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="/fixed/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>About</title>
-      <link>http://localhost:1313/about/</link>
+      <link>about/</link>
       <pubDate>Sat, 22 Aug 2015 06:42:21 -0700</pubDate>
       
-      <guid>http://localhost:1313/about/</guid>
-      <description>&lt;p&gt;Along with &lt;a href=&#34;https://en.wikipedia.org/wiki/Ford_Prefect_(character)&#34;&gt;Ford Prefect&lt;/a&gt;, Dent barely escapes the Earth&amp;rsquo;s destruction as it is demolished to make way for a &lt;em&gt;hyperspace bypass&lt;/em&gt;. Arthur spends the next several years, still wearing his dressing gown, helplessly launched from crisis to crisis while trying to straighten out his lifestyle.&lt;/p&gt;
+      <guid>about/</guid>
+      <description>&lt;p&gt;This website is called ItchyKnowsDevs.
+It&amp;rsquo;s a play on words of Itchy Nose Developers. Which doesn&amp;rsquo;t make much sense either.&lt;/p&gt;
 
-&lt;blockquote&gt;
-&lt;p&gt;He rather enjoys tea, but seems to have trouble obtaining it in the far reaches of the galaxy.&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;My name is Aleksandr Guljajev.&lt;/p&gt;
 
-&lt;p&gt;In time, he learns how to fly and carves a niche for himself as a sandwich-maker.&lt;/p&gt;
+&lt;p&gt;I reside in Amsterdam, the Netherlands.
+I am a freelance software developer.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;//placehold.it/300x300&#34; class=&#34;profile&#34;&gt;&lt;/p&gt;
+&lt;p&gt;I love progress.
+I love learning,
+I love customizing and crafting the tools I use.
+I love technology and innovation.
+I love tinkering, hacking, exploring and learning.
+I hate most technologies, programming languages and operating systems.
+I hate flame wars on what&amp;rsquo;s better. It&amp;rsquo;s what works for you or what doesn&amp;rsquo;t.
+I hate premature optimisation.
+I hate arguments for the sake of drama.
+I prefer learning concepts over implementation. That&amp;rsquo;s why I try to learn the underlying principles instead of memorizing CLI commands.&lt;/p&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p&gt;In this blog I write mostly about the things I love. But occasionally about the things I hate.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;colophon/&#34;&gt;About this site&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;I love this quote by Mark Twain: &amp;ldquo;Whenever you find yourself on the side of the majority, it is time to pause and reflect.&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;That said, I love reflecting.&lt;/p&gt;
+
+&lt;p&gt;Write me on my email address &amp;ldquo;gulyayev.alex&amp;rdquo; at &amp;ldquo;gmail.com&amp;rdquo; to tell me about the things you hate and love.&lt;/p&gt;
 </description>
     </item>
     
     <item>
       <title>colophon</title>
-      <link>http://localhost:1313/colophon/</link>
+      <link>colophon/</link>
       <pubDate>Sat, 22 Aug 2015 06:28:26 -0700</pubDate>
       
-      <guid>http://localhost:1313/colophon/</guid>
+      <guid>colophon/</guid>
       <description>&lt;p&gt;This website is a personal homepage.&lt;/p&gt;
 
-&lt;p&gt;The site is built with &lt;a target=&#34;_blank&#34; href=&#34;//gohugo.io&#34;&gt;Hugo&lt;/a&gt;—a static site generator made with Go. The website &lt;a href=&#34;http://localhost:1313/&#34;&gt;source code&lt;/a&gt; is available on GitHub. It uses the &lt;a target=&#34;_blank&#34; href=&#34;//github.com/nishanths/cocoa-hugo-theme&#34;&gt;cocoa&lt;/a&gt; theme. The posts are written in Markdown.&lt;/p&gt;
+&lt;p&gt;The site is built with &lt;a target=&#34;_blank&#34; href=&#34;//gohugo.io&#34;&gt;Hugo&lt;/a&gt;—a static site generator made with Go. The website &lt;a href=&#34;/&#34;&gt;source code&lt;/a&gt; is available on GitHub. It uses the &lt;a target=&#34;_blank&#34; href=&#34;//github.com/nishanths/cocoa-hugo-theme&#34;&gt;cocoa&lt;/a&gt; theme. The posts are written in Markdown.&lt;/p&gt;
 
 &lt;p&gt;The primary font face is Open Sans and the monospace font face is Ubuntu Mono. The social icons are from the Ionicons font set. CSS classes for code syntax highlighting are inserted during compile-time by Hugo using Pygments.&lt;/p&gt;
 
-&lt;p&gt;If you find errors, &lt;a href=&#34;http://localhost:1313/&#34;&gt;please let me know&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;If you find errors, &lt;a href=&#34;/&#34;&gt;please let me know&lt;/a&gt;.&lt;/p&gt;
 </description>
     </item>
     
     <item>
       <title>Code</title>
-      <link>http://localhost:1313/code/</link>
+      <link>code/</link>
       <pubDate>Wed, 19 Aug 2015 20:29:37 -0700</pubDate>
       
-      <guid>http://localhost:1313/code/</guid>
-      <description>
+      <guid>code/</guid>
+      <description>&lt;p&gt;I enjoy writing Go, Clojure, PHP, Java, NodeJS, &amp;ldquo;Hobby&amp;rdquo; C.
+I contribute to open source software projects.&lt;/p&gt;
 
-&lt;p&gt;The Hitchhiker&amp;rsquo;s Guide to the Galaxy is a comedy science fiction series created by &lt;a href=&#34;https://en.wikipedia.org/wiki/Douglas_Adams&#34;&gt;Douglas Adams&lt;/a&gt;. Originally a radio comedy broadcast on BBC Radio 4 in 1978, it was later adapted to other formats, and over several years it gradually became an international multi-media phenomenon. Adaptations have included stage shows, a &amp;ldquo;trilogy&amp;rdquo; of five books published between 1979 and 1992, a sixth novel penned by &lt;a href=&#34;https://en.wikipedia.org/wiki/Eoin_Colfer&#34;&gt;Eoin Colfer&lt;/a&gt; in 2009, a 1981 TV series, a 1984 computer game, and three series of three-part comic book adaptations of the first three novels published by DC Comics between 1993 and 1996. There were also two series of towels, produced by Beer-Davies, that are considered by some fans to be an &amp;ldquo;official version&amp;rdquo; of The Hitchhiker&amp;rsquo;s Guide to the Galaxy, as they include text from the first novel.&lt;/p&gt;
-
-&lt;h3 id=&#34;movie:cb7f612e17aad7eb26c06709ef92a867&#34;&gt;Movie&lt;/h3&gt;
-
-&lt;p&gt;A Hollywood-funded film version, produced and filmed in the UK, was released in April 2005, and radio adaptations of the third, fourth, and fifth novels were broadcast from 2004 to 2005. Adams did many of these adaptations, including the novels, the TV series, the computer game, and the earliest drafts of the Hollywood film’s screenplay, and some of the stage shows introduced new material written by Adams.&lt;/p&gt;
+&lt;p&gt;Go to my &lt;a href=&#34;http://github.com/alex-glv&#34;&gt;github.com profile&lt;/a&gt; to see what projects I contribute to.&lt;/p&gt;
 </description>
     </item>
     
