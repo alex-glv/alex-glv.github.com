@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Blog on Aleksandr Guljajev</title>
-    <link>/blog/</link>
+    <link>http://www.itchyknowsdevs.me/blog/</link>
     <description>Recent content in Blog on Aleksandr Guljajev</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
     <lastBuildDate>Tue, 16 Feb 2016 00:00:00 +0000</lastBuildDate>
-    <atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://www.itchyknowsdevs.me/blog/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Containers are not real</title>
-      <link>blog/containers-are-not-real/</link>
+      <link>http://www.itchyknowsdevs.me/blog/containers-are-not-real/</link>
       <pubDate>Tue, 16 Feb 2016 00:00:00 +0000</pubDate>
       
-      <guid>blog/containers-are-not-real/</guid>
+      <guid>http://www.itchyknowsdevs.me/blog/containers-are-not-real/</guid>
       <description>
 
 &lt;h1 id=&#34;the-advent-of-containers:c8e2a09ea174ff8e7c9537b614f3c385&#34;&gt;The advent of containers&lt;/h1&gt;

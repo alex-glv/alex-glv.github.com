@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Fixed on Aleksandr Guljajev</title>
-    <link>/fixed/</link>
+    <link>http://www.itchyknowsdevs.me/fixed/</link>
     <description>Recent content in Fixed on Aleksandr Guljajev</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
     <lastBuildDate>Sat, 22 Aug 2015 06:42:21 -0700</lastBuildDate>
-    <atom:link href="/fixed/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://www.itchyknowsdevs.me/fixed/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>About</title>
-      <link>about/</link>
+      <link>http://www.itchyknowsdevs.me/about/</link>
       <pubDate>Sat, 22 Aug 2015 06:42:21 -0700</pubDate>
       
-      <guid>about/</guid>
+      <guid>http://www.itchyknowsdevs.me/about/</guid>
       <description>&lt;p&gt;This website is called ItchyKnowsDevs.
-It&amp;rsquo;s a play on words of Itchy Nose Developers. Which doesn&amp;rsquo;t make much sense either.&lt;/p&gt;
+It&amp;rsquo;s a play on words Itchy Nose Developers. Which doesn&amp;rsquo;t make much sense either.&lt;/p&gt;
 
 &lt;p&gt;My name is Aleksandr Guljajev.&lt;/p&gt;
 
@@ -46,26 +46,26 @@ I prefer learning concepts over implementation. That&amp;rsquo;s why I try to le
     
     <item>
       <title>colophon</title>
-      <link>colophon/</link>
+      <link>http://www.itchyknowsdevs.me/colophon/</link>
       <pubDate>Sat, 22 Aug 2015 06:28:26 -0700</pubDate>
       
-      <guid>colophon/</guid>
+      <guid>http://www.itchyknowsdevs.me/colophon/</guid>
       <description>&lt;p&gt;This website is a personal homepage.&lt;/p&gt;
 
-&lt;p&gt;The site is built with &lt;a target=&#34;_blank&#34; href=&#34;//gohugo.io&#34;&gt;Hugo&lt;/a&gt;—a static site generator made with Go. The website &lt;a href=&#34;/&#34;&gt;source code&lt;/a&gt; is available on GitHub. It uses the &lt;a target=&#34;_blank&#34; href=&#34;//github.com/nishanths/cocoa-hugo-theme&#34;&gt;cocoa&lt;/a&gt; theme. The posts are written in Markdown.&lt;/p&gt;
+&lt;p&gt;The site is built with &lt;a target=&#34;_blank&#34; href=&#34;//gohugo.io&#34;&gt;Hugo&lt;/a&gt;—a static site generator made with Go. The website &lt;a href=&#34;http://www.itchyknowsdevs.me/&#34;&gt;source code&lt;/a&gt; is available on GitHub. It uses the &lt;a target=&#34;_blank&#34; href=&#34;//github.com/nishanths/cocoa-hugo-theme&#34;&gt;cocoa&lt;/a&gt; theme. The posts are written in Markdown.&lt;/p&gt;
 
 &lt;p&gt;The primary font face is Open Sans and the monospace font face is Ubuntu Mono. The social icons are from the Ionicons font set. CSS classes for code syntax highlighting are inserted during compile-time by Hugo using Pygments.&lt;/p&gt;
 
-&lt;p&gt;If you find errors, &lt;a href=&#34;/&#34;&gt;please let me know&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;If you find errors, &lt;a href=&#34;http://www.itchyknowsdevs.me/&#34;&gt;please let me know&lt;/a&gt;.&lt;/p&gt;
 </description>
     </item>
     
     <item>
       <title>Code</title>
-      <link>code/</link>
+      <link>http://www.itchyknowsdevs.me/code/</link>
       <pubDate>Wed, 19 Aug 2015 20:29:37 -0700</pubDate>
       
-      <guid>code/</guid>
+      <guid>http://www.itchyknowsdevs.me/code/</guid>
       <description>&lt;p&gt;I enjoy writing Go, Clojure, PHP, Java, NodeJS, &amp;ldquo;Hobby&amp;rdquo; C.
 I contribute to open source software projects.&lt;/p&gt;
 

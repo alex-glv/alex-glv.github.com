@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Aleksandr Guljajev</title>
-    <link>/</link>
+    <link>http://www.itchyknowsdevs.me/</link>
     <description>Recent content on Aleksandr Guljajev</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
     <lastBuildDate>Tue, 16 Feb 2016 00:00:00 +0000</lastBuildDate>
-    <atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://www.itchyknowsdevs.me/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Containers are not real</title>
-      <link>blog/containers-are-not-real/</link>
+      <link>http://www.itchyknowsdevs.me/blog/containers-are-not-real/</link>
       <pubDate>Tue, 16 Feb 2016 00:00:00 +0000</pubDate>
       
-      <guid>blog/containers-are-not-real/</guid>
+      <guid>http://www.itchyknowsdevs.me/blog/containers-are-not-real/</guid>
       <description>
 
 &lt;h1 id=&#34;the-advent-of-containers:c8e2a09ea174ff8e7c9537b614f3c385&#34;&gt;The advent of containers&lt;/h1&gt;
@@ -172,10 +172,10 @@ We learned to unshare namespaces, create network configuration that allows acces
     
     <item>
       <title>Containers are not real</title>
-      <link>/post/containers-are-not-real/</link>
+      <link>http://www.itchyknowsdevs.me/post/containers-are-not-real/</link>
       <pubDate>Tue, 16 Feb 2016 00:00:00 +0000</pubDate>
       
-      <guid>/post/containers-are-not-real/</guid>
+      <guid>http://www.itchyknowsdevs.me/post/containers-are-not-real/</guid>
       <description>
 
 &lt;h1 id=&#34;the-advent-of-containers:c8e2a09ea174ff8e7c9537b614f3c385&#34;&gt;The advent of containers&lt;/h1&gt;
@@ -333,12 +333,12 @@ We learned to unshare namespaces, create network configuration that allows acces
     
     <item>
       <title>About</title>
-      <link>about/</link>
+      <link>http://www.itchyknowsdevs.me/about/</link>
       <pubDate>Sat, 22 Aug 2015 06:42:21 -0700</pubDate>
       
-      <guid>about/</guid>
+      <guid>http://www.itchyknowsdevs.me/about/</guid>
       <description>&lt;p&gt;This website is called ItchyKnowsDevs.
-It&amp;rsquo;s a play on words of Itchy Nose Developers. Which doesn&amp;rsquo;t make much sense either.&lt;/p&gt;
+It&amp;rsquo;s a play on words Itchy Nose Developers. Which doesn&amp;rsquo;t make much sense either.&lt;/p&gt;
 
 &lt;p&gt;My name is Aleksandr Guljajev.&lt;/p&gt;
 
@@ -368,26 +368,26 @@ I prefer learning concepts over implementation. That&amp;rsquo;s why I try to le
     
     <item>
       <title>colophon</title>
-      <link>colophon/</link>
+      <link>http://www.itchyknowsdevs.me/colophon/</link>
       <pubDate>Sat, 22 Aug 2015 06:28:26 -0700</pubDate>
       
-      <guid>colophon/</guid>
+      <guid>http://www.itchyknowsdevs.me/colophon/</guid>
       <description>&lt;p&gt;This website is a personal homepage.&lt;/p&gt;
 
-&lt;p&gt;The site is built with &lt;a target=&#34;_blank&#34; href=&#34;//gohugo.io&#34;&gt;Hugo&lt;/a&gt;—a static site generator made with Go. The website &lt;a href=&#34;/&#34;&gt;source code&lt;/a&gt; is available on GitHub. It uses the &lt;a target=&#34;_blank&#34; href=&#34;//github.com/nishanths/cocoa-hugo-theme&#34;&gt;cocoa&lt;/a&gt; theme. The posts are written in Markdown.&lt;/p&gt;
+&lt;p&gt;The site is built with &lt;a target=&#34;_blank&#34; href=&#34;//gohugo.io&#34;&gt;Hugo&lt;/a&gt;—a static site generator made with Go. The website &lt;a href=&#34;http://www.itchyknowsdevs.me/&#34;&gt;source code&lt;/a&gt; is available on GitHub. It uses the &lt;a target=&#34;_blank&#34; href=&#34;//github.com/nishanths/cocoa-hugo-theme&#34;&gt;cocoa&lt;/a&gt; theme. The posts are written in Markdown.&lt;/p&gt;
 
 &lt;p&gt;The primary font face is Open Sans and the monospace font face is Ubuntu Mono. The social icons are from the Ionicons font set. CSS classes for code syntax highlighting are inserted during compile-time by Hugo using Pygments.&lt;/p&gt;
 
-&lt;p&gt;If you find errors, &lt;a href=&#34;/&#34;&gt;please let me know&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;If you find errors, &lt;a href=&#34;http://www.itchyknowsdevs.me/&#34;&gt;please let me know&lt;/a&gt;.&lt;/p&gt;
 </description>
     </item>
     
     <item>
       <title>Code</title>
-      <link>code/</link>
+      <link>http://www.itchyknowsdevs.me/code/</link>
       <pubDate>Wed, 19 Aug 2015 20:29:37 -0700</pubDate>
       
-      <guid>code/</guid>
+      <guid>http://www.itchyknowsdevs.me/code/</guid>
       <description>&lt;p&gt;I enjoy writing Go, Clojure, PHP, Java, NodeJS, &amp;ldquo;Hobby&amp;rdquo; C.
 I contribute to open source software projects.&lt;/p&gt;
 
@@ -397,14 +397,14 @@ I contribute to open source software projects.&lt;/p&gt;
     
     <item>
       <title></title>
-      <link>/about-this-site/</link>
+      <link>http://www.itchyknowsdevs.me/about-this-site/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/about-this-site/</guid>
+      <guid>http://www.itchyknowsdevs.me/about-this-site/</guid>
       <description>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
   &lt;head&gt;
-    &lt;link rel=&#34;canonical&#34; href=&#34;/colophon&#34;/&gt;
+    &lt;link rel=&#34;canonical&#34; href=&#34;http://www.itchyknowsdevs.me/colophon&#34;/&gt;
     &lt;meta http-equiv=&#34;content-type&#34; content=&#34;text/html; charset=utf-8&#34;/&gt;
     &lt;meta http-equiv=&#34;refresh&#34; content=&#34;0;url=/colophon&#34;/&gt;
   &lt;/head&gt;
@@ -414,14 +414,14 @@ I contribute to open source software projects.&lt;/p&gt;
     
     <item>
       <title></title>
-      <link>/posts/</link>
+      <link>http://www.itchyknowsdevs.me/posts/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/posts/</guid>
+      <guid>http://www.itchyknowsdevs.me/posts/</guid>
       <description>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
   &lt;head&gt;
-    &lt;link rel=&#34;canonical&#34; href=&#34;/blog&#34;/&gt;
+    &lt;link rel=&#34;canonical&#34; href=&#34;http://www.itchyknowsdevs.me/blog&#34;/&gt;
     &lt;meta http-equiv=&#34;content-type&#34; content=&#34;text/html; charset=utf-8&#34;/&gt;
     &lt;meta http-equiv=&#34;refresh&#34; content=&#34;0;url=/blog&#34;/&gt;
   &lt;/head&gt;
@@ -431,14 +431,14 @@ I contribute to open source software projects.&lt;/p&gt;
     
     <item>
       <title></title>
-      <link>/writing/</link>
+      <link>http://www.itchyknowsdevs.me/writing/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/writing/</guid>
+      <guid>http://www.itchyknowsdevs.me/writing/</guid>
       <description>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
   &lt;head&gt;
-    &lt;link rel=&#34;canonical&#34; href=&#34;/posts&#34;/&gt;
+    &lt;link rel=&#34;canonical&#34; href=&#34;http://www.itchyknowsdevs.me/posts&#34;/&gt;
     &lt;meta http-equiv=&#34;content-type&#34; content=&#34;text/html; charset=utf-8&#34;/&gt;
     &lt;meta http-equiv=&#34;refresh&#34; content=&#34;0;url=/posts&#34;/&gt;
   &lt;/head&gt;
