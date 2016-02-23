@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>http://localhost:1313/</loc>
+    <lastmod>2015-12-21T04:05:25-06:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://localhost:1313/blog/les-mis%C3%A9rables-by-victor-hugo/</loc>
+    <lastmod>2015-12-21T04:05:25-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://localhost:1313/blog/metamorphosis-by-franz-kafka/</loc>
+    <lastmod>2015-12-21T04:03:46-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://localhost:1313/blog/use-at-instead-of-head/</loc>
+    <lastmod>2015-08-25T17:09:14-05:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://localhost:1313/about/</loc>
+    <lastmod>2015-08-22T06:42:21-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://localhost:1313/colophon/</loc>
+    <lastmod>2015-08-22T06:28:26-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://localhost:1313/code/</loc>
+    <lastmod>2015-08-19T20:29:37-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://localhost:1313/about-this-site/</loc>
+  </url>
+  
+  <url>
+    <loc>http://localhost:1313/posts/</loc>
+  </url>
+  
+  <url>
+    <loc>http://localhost:1313/writing/</loc>
+  </url>
+  
+</urlset>
