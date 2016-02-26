@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Developer">
+
+<base href="http://www.itchyknowsdevs.me/">
+<title>
+
+
+     Hugo on Amazon AWS Lambda integrated with GitHub 
+
+</title>
+<link rel="canonical" href="http://www.itchyknowsdevs.me/blog/hugo-on-amazon-aws-lambda-integrated-with-github/">
+
+
+<script type="text/javascript">
+    var baseURL = 'http:\/\/www.itchyknowsdevs.me\/';
+    var host = baseURL.substring(0, baseURL.length - 1).replace(/\//g, '');
+    if ((host === window.location.host) && (window.location.protocol !== 'https:')) {
+        window.location.protocol = 'https:';
+    }
+</script>
+
+
+
+
+
+<link rel="stylesheet" href="http://www.itchyknowsdevs.me/css/reset.css">
+<link rel="stylesheet" href="http://www.itchyknowsdevs.me/css/pygments.css">
+<link rel="stylesheet" href="http://www.itchyknowsdevs.me/css/main.css">
+
+
+    <link rel="stylesheet" href="http://www.itchyknowsdevs.me/css/override.css">
+
+
+
+
+
+<link rel="shortcut icon"
+
+    href="http://www.itchyknowsdevs.me/img/leaf.ico"
+
+>
+
+
+
+</head>
+
+
+<body lang="en">
+
+<section class="header"> 
+    <div class="container">
+        <div class="content">
+            <a href="http://www.itchyknowsdevs.me/"><div class="name">Aleksandr Guljajev</div></a>
+            <nav>
+                <ul>
+                    <a href="http://www.itchyknowsdevs.me/blog/"><li>Blog</li></a>
+                    <a href="http://www.itchyknowsdevs.me/about/"><li>About</li></a>
+                    <a href="http://www.itchyknowsdevs.me/code/"><li>Code</li></a>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</section>
+
+<section class="icons">
+    <div class="container">
+        <div class="content">
+
+        
+            <a href="//github.com/alex-glv" target="_blank">
+                <i class="icon ion-social-github"></i>
+            </a>
+        
+        
+        
+            <a href="//twitter.com/jaleks_" target="_blank">
+                <i class="icon ion-social-twitter"></i>
+            </a>
+        
+
+        
+            <a href="//linkedin.com/in/aleksadr-guljajev-a17941a6" target="_blank">
+                <i class="icon ion-social-linkedin"></i>
+            </a>
+        
+
+        
+
+        
+
+        
+        </div>
+    </div>
+</section>
+
+
+<section class="main post non-narrow zero-top-spacing">
+    <div class="container">
+        <div class="content">
+            <div class="front-matter">
+                <div class="title-container">
+                    <div class="page-heading">
+
+    Hugo on Amazon AWS Lambda integrated with GitHub
+
+</div>
+
+                    <div class="initials"><a href="http://www.itchyknowsdevs.me/">ag</a></div>
+                </div>
+                <div class="meta">
+                    <div class="date" title="Fri Feb 26 2016 00:00:00 UTC">Feb 26, 2016</div>
+                    <div class="reading-time"><div class="middot"></div>3 minutes read</div>
+                </div>
+            </div>
+            <div class="markdown">
+                
+
+<h1 id="the-problem:a1ec05e051105cb1bb5549ae149fdde7">The Problem</h1>
+
+<p>I love static website generators. I think it&rsquo;s a great iteration over the old approach before dynamic websites became a de-facto standard.</p>
+
+<p>The most compelling argument towards using static websites is &ldquo;minimum-hosting&rdquo; approach.
+The only thing you need is a web server and a domain name.</p>
+
+<p>You still have the problem of continuos delivery. If you are anything like me, you don&rsquo;t want to keep rebuilding and deploying your website manually.</p>
+
+<p>Make changes, test locally, push, make a sandwich and reflect on eternity of consciousness in the Universe. The changes are live. Ah, beautiful.</p>
+
+<h1 id="inspiration:a1ec05e051105cb1bb5549ae149fdde7">Inspiration</h1>
+
+<p>My approach was inspired by <a href="bezdelev.com/post/hugo-aws-lambda-static-website/">this blogpost</a>.
+I though, huh, this is cool. Then I set it up and quickly realised its shortcoming: manual S3 website upload.</p>
+
+<p>I decided to take it a step further and integrate the process with GitHub.</p>
+
+<h1 id="prerequisites-process:a1ec05e051105cb1bb5549ae149fdde7">Prerequisites &amp; process</h1>
+
+<p>Some familiarity with AWS is required.</p>
+
+<p>You have configured all the required components on AWS to publish your website:</p>
+
+<ul>
+<li>S3 bucket with the source files</li>
+<li>Route 53 for DNS</li>
+<li>CloudFront for SSL and load balancing.</li>
+</ul>
+
+<p>This guide will only address publishing your static content through Hugo compiler from GitHub to S3 bucket.</p>
+
+<p>My AWS configuration is very similar described in the post above.</p>
+
+<p>There are some changes, however:</p>
+
+<ul>
+<li>I don&rsquo;t have the input.<website> bucket, the changes are pulled off GitHub</li>
+<li>I have configured AWS SNS with GitHub WebHooks. Each commit is trigering SNS which in turn is configured as AWS Lambda event source.</li>
+</ul>
+
+<h1 id="introducing-github-hugo-lambda-integration-project:a1ec05e051105cb1bb5549ae149fdde7">Introducing GitHub-Hugo-Lambda integration project</h1>
+
+<p><a href="https://github.com/alex-glv/github-hugo-lambda">Github Hugo Lambda</a> project should do most of the configuration for you.
+It will initialise Node dependencies, create Lambda code package and upload it on Amazon AWS Lambda.
+There don&rsquo;t seem to be a way to create Event source mapping from SNS to Lambda through AWS Cli so you have to do it manually.
+You have to create GitHub.com webhook service set-up to fire Amazon SNS event.</p>
+
+<p>Start by checking out the project:</p>
+
+<p><code>git clone https://github.com/alex-glv/github-hugo-lambda</code></p>
+
+<p>Create config files from provided samples:</p>
+
+<pre><code>cp {sample,}.config.mk
+cp {sample,}.config.json
+cp {sample,}.rolepolicyS3.json
+</code></pre>
+
+<p>Edit the config files, this should be straightforward</p>
+
+<p>Then, run:</p>
+
+<p><code>make createsns</code></p>
+
+<p>This will create an SNS topic.
+Now, navigate to GitHub.com project Settings -&gt; Webhooks &amp; services -&gt; Add Service -&gt; Amazon SNS.
+Fill in the required values and submit. This should be it for configuring GitHub.
+We need to create Roles and Policies to allow Lambda access to our S3 bucket.</p>
+
+<p>Run <code>make createrole</code> to create the role and necessary policies.</p>
+
+<p>Now run:</p>
+
+<p><code>make initnodedeps &amp;&amp; make build &amp;&amp; make deploy</code></p>
+
+<p>This will pull NodeJS dependencies, zip the files and push it to Amazon Lambda.
+After this has been completed, go to Lambda configuration page, add Event source and choose the SNS entry you created earlier.</p>
+
+<p>At this point, everything should be set.</p>
+
+<p>NOTE: p7zip is a must for creating the archive. It seems that de-facto zip archiver on Unix does not retain executable flags that are required to run hugo, because it&rsquo;s a compiled executable.</p>
+
+<p>You can rune the test by clicking &ldquo;Test service&rdquo; from the Github webhooks page and it will send the test payload.</p>
+
+<h1 id="conclusion:a1ec05e051105cb1bb5549ae149fdde7">Conclusion</h1>
+
+<p>Hopefully this post and project help you to streamline creation of simple static websites.
+Configured once, deployment will be fully automated and you can concentrate on creating value rather than worrying how to publish your website changes.</p>
+
+                <br>
+                <p><a href="http://www.itchyknowsdevs.me/blog/">Back to posts</a></p>
+            </div>
+            <br>
+            <div class="disqus">
+                
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+</body>
+</html>
+

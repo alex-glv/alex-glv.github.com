@@ -6,8 +6,108 @@
     <description>Recent content in Blog on Aleksandr Guljajev</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
-    <lastBuildDate>Tue, 16 Feb 2016 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 26 Feb 2016 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://www.itchyknowsdevs.me/blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Hugo on Amazon AWS Lambda integrated with GitHub</title>
+      <link>http://www.itchyknowsdevs.me/blog/hugo-on-amazon-aws-lambda-integrated-with-github/</link>
+      <pubDate>Fri, 26 Feb 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.itchyknowsdevs.me/blog/hugo-on-amazon-aws-lambda-integrated-with-github/</guid>
+      <description>
+
+&lt;h1 id=&#34;the-problem:a1ec05e051105cb1bb5549ae149fdde7&#34;&gt;The Problem&lt;/h1&gt;
+
+&lt;p&gt;I love static website generators. I think it&amp;rsquo;s a great iteration over the old approach before dynamic websites became a de-facto standard.&lt;/p&gt;
+
+&lt;p&gt;The most compelling argument towards using static websites is &amp;ldquo;minimum-hosting&amp;rdquo; approach.
+The only thing you need is a web server and a domain name.&lt;/p&gt;
+
+&lt;p&gt;You still have the problem of continuos delivery. If you are anything like me, you don&amp;rsquo;t want to keep rebuilding and deploying your website manually.&lt;/p&gt;
+
+&lt;p&gt;Make changes, test locally, push, make a sandwich and reflect on eternity of consciousness in the Universe. The changes are live. Ah, beautiful.&lt;/p&gt;
+
+&lt;h1 id=&#34;inspiration:a1ec05e051105cb1bb5549ae149fdde7&#34;&gt;Inspiration&lt;/h1&gt;
+
+&lt;p&gt;My approach was inspired by &lt;a href=&#34;bezdelev.com/post/hugo-aws-lambda-static-website/&#34;&gt;this blogpost&lt;/a&gt;.
+I though, huh, this is cool. Then I set it up and quickly realised its shortcoming: manual S3 website upload.&lt;/p&gt;
+
+&lt;p&gt;I decided to take it a step further and integrate the process with GitHub.&lt;/p&gt;
+
+&lt;h1 id=&#34;prerequisites-process:a1ec05e051105cb1bb5549ae149fdde7&#34;&gt;Prerequisites &amp;amp; process&lt;/h1&gt;
+
+&lt;p&gt;Some familiarity with AWS is required.&lt;/p&gt;
+
+&lt;p&gt;You have configured all the required components on AWS to publish your website:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;S3 bucket with the source files&lt;/li&gt;
+&lt;li&gt;Route 53 for DNS&lt;/li&gt;
+&lt;li&gt;CloudFront for SSL and load balancing.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This guide will only address publishing your static content through Hugo compiler from GitHub to S3 bucket.&lt;/p&gt;
+
+&lt;p&gt;My AWS configuration is very similar described in the post above.&lt;/p&gt;
+
+&lt;p&gt;There are some changes, however:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;I don&amp;rsquo;t have the input.&lt;website&gt; bucket, the changes are pulled off GitHub&lt;/li&gt;
+&lt;li&gt;I have configured AWS SNS with GitHub WebHooks. Each commit is trigering SNS which in turn is configured as AWS Lambda event source.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;introducing-github-hugo-lambda-integration-project:a1ec05e051105cb1bb5549ae149fdde7&#34;&gt;Introducing GitHub-Hugo-Lambda integration project&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/alex-glv/github-hugo-lambda&#34;&gt;Github Hugo Lambda&lt;/a&gt; project should do most of the configuration for you.
+It will initialise Node dependencies, create Lambda code package and upload it on Amazon AWS Lambda.
+There don&amp;rsquo;t seem to be a way to create Event source mapping from SNS to Lambda through AWS Cli so you have to do it manually.
+You have to create GitHub.com webhook service set-up to fire Amazon SNS event.&lt;/p&gt;
+
+&lt;p&gt;Start by checking out the project:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git clone https://github.com/alex-glv/github-hugo-lambda&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Create config files from provided samples:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;cp {sample,}.config.mk
+cp {sample,}.config.json
+cp {sample,}.rolepolicyS3.json
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Edit the config files, this should be straightforward&lt;/p&gt;
+
+&lt;p&gt;Then, run:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;make createsns&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;This will create an SNS topic.
+Now, navigate to GitHub.com project Settings -&amp;gt; Webhooks &amp;amp; services -&amp;gt; Add Service -&amp;gt; Amazon SNS.
+Fill in the required values and submit. This should be it for configuring GitHub.
+We need to create Roles and Policies to allow Lambda access to our S3 bucket.&lt;/p&gt;
+
+&lt;p&gt;Run &lt;code&gt;make createrole&lt;/code&gt; to create the role and necessary policies.&lt;/p&gt;
+
+&lt;p&gt;Now run:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;make initnodedeps &amp;amp;&amp;amp; make build &amp;amp;&amp;amp; make deploy&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;This will pull NodeJS dependencies, zip the files and push it to Amazon Lambda.
+After this has been completed, go to Lambda configuration page, add Event source and choose the SNS entry you created earlier.&lt;/p&gt;
+
+&lt;p&gt;At this point, everything should be set.&lt;/p&gt;
+
+&lt;p&gt;NOTE: p7zip is a must for creating the archive. It seems that de-facto zip archiver on Unix does not retain executable flags that are required to run hugo, because it&amp;rsquo;s a compiled executable.&lt;/p&gt;
+
+&lt;p&gt;You can rune the test by clicking &amp;ldquo;Test service&amp;rdquo; from the Github webhooks page and it will send the test payload.&lt;/p&gt;
+
+&lt;h1 id=&#34;conclusion:a1ec05e051105cb1bb5549ae149fdde7&#34;&gt;Conclusion&lt;/h1&gt;
+
+&lt;p&gt;Hopefully this post and project help you to streamline creation of simple static websites.
+Configured once, deployment will be fully automated and you can concentrate on creating value rather than worrying how to publish your website changes.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Containers are not real</title>
