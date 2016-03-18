@@ -6,8 +6,78 @@
     <description>Recent content on Aleksandr Guljajev</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
-    <lastBuildDate>Fri, 26 Feb 2016 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 18 Mar 2016 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://www.itchyknowsdevs.me/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Developing golang in NixOS</title>
+      <link>http://www.itchyknowsdevs.me/blog/developing-golang-in-nixos/</link>
+      <pubDate>Fri, 18 Mar 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.itchyknowsdevs.me/blog/developing-golang-in-nixos/</guid>
+      <description>
+
+&lt;h1 id=&#34;why-nixos:e2b73a651c59252a5565288c4b4fcc8f&#34;&gt;Why NixOS?&lt;/h1&gt;
+
+&lt;p&gt;The idea of fully reproducible system fascinates me a lot.
+Part of Getting Things Done philosophy is not to contaminate your head with the little things you have to do, you put them down on a list.
+That&amp;rsquo;s why we use password managers, because you don&amp;rsquo;t want to keep all those password from a bazillion websites in your head - you trust something else to keep them.
+With you development environment it&amp;rsquo;s the same - you build your custom machine and when your drive goes bust, you go: &amp;ldquo;Oh, shit.. When&amp;rsquo;s my latest backup, again?&amp;rdquo;
+That&amp;rsquo;s why you check in your OS configuration.
+NixOS eliminates this issue 99% so you have even less to worry about.&lt;/p&gt;
+
+&lt;p&gt;Take a look, &lt;a href=&#34;https://github.com/alex-glv/nixos-conf&#34;&gt;this is my OS&lt;/a&gt; - all the software I use, my user user account, services - everything.
+The only thing that I need to do to fully replicate my system on a machine is pull the config, and run &lt;code&gt;nixos-install&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;This is great and all, but where&amp;rsquo;s the catch?&lt;/p&gt;
+
+&lt;h1 id=&#34;the-catch:e2b73a651c59252a5565288c4b4fcc8f&#34;&gt;The Catch&lt;/h1&gt;
+
+&lt;p&gt;NixOS comes with the Nix package manager and their its flavored language to describe those packages.
+You most likely have never heard of Nix, it&amp;rsquo;s not arch or OSX with Homebrew and all the packages imaginable.
+So, you&amp;rsquo;ll have to write some packages yourself.&lt;/p&gt;
+
+&lt;h1 id=&#34;golang-dependencies:e2b73a651c59252a5565288c4b4fcc8f&#34;&gt;Golang - dependencies&lt;/h1&gt;
+
+&lt;p&gt;Nix package manager is also capable of handling go dependencies, which is great, because it&amp;rsquo;s a decent replacement for &lt;code&gt;go get&lt;/code&gt;. [1]
+However, if you want to quickly hack on a CLI tool, it gets a bit hairy: try to figure if the packages are present in the repository, if not then you have to write them yourself.
+It&amp;rsquo;s a bit too slow and I am not very experienced with that yet.
+So, I prefer to use godep instead. Luckily it&amp;rsquo;s easy to obtain with the usual &lt;code&gt;nix-env -i godep&lt;/code&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;goroot-and-gopath:e2b73a651c59252a5565288c4b4fcc8f&#34;&gt;GOROOT and GOPATH&lt;/h1&gt;
+
+&lt;p&gt;I store my sources in a home directory, which means I also need to have $GOROOT exported to allow go tools like gofmt and gorcode to locate the standard library sources.
+Luckily, adding extra variables to your environment is very easy in nix:&lt;/p&gt;
+
+&lt;p&gt;Add go to your systemPackages list under your configuration.nix [2] file:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;environment.systemPackages = with pkgs; [
+  go
+  // other pkgs
+];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then, add the extra environment variable:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;environment.variables = { GOROOT = [ &amp;quot;${pkgs.go.out}/share/go&amp;quot; ]; };
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This ensures your GOROOT will always point to standard library sources directory.
+Adding GOPATH is very similar, however I tend to store it in my bashrc somewher under dotfiles.&lt;/p&gt;
+
+&lt;h1 id=&#34;balance:e2b73a651c59252a5565288c4b4fcc8f&#34;&gt;Balance&lt;/h1&gt;
+
+&lt;p&gt;I found a good compromise between reproducible system and convenience to use it.
+You can have godep and gocode fully working with the necessary environment variables set, and also have these settings stored under nix configuration file.&lt;/p&gt;
+
+&lt;h1 id=&#34;footnotes:e2b73a651c59252a5565288c4b4fcc8f&#34;&gt;Footnotes&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://lethalman.blogspot.nl/2015/02/developing-in-golang-with-nix-package.html&#34;&gt;Developing in golang with nix package&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://nixos.org/nixos/manual/index.html#sec-changing-config&#34;&gt;NixOS manual: changing configuration&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
     
     <item>
       <title>Hugo on Amazon AWS Lambda integrated with GitHub</title>
