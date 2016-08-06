@@ -13,18 +13,18 @@
 <title>
 
 
-    Developing Golang in NixOS 
+     Developing Golang in NixOS 
 
 </title>
 <link rel="canonical" href="http://www.itchyknowsdevs.me/blog/developing-golang-in-nixos/">
 
 
 <script type="text/javascript">
- var baseURL = 'http:\/\/www.itchyknowsdevs.me\/';
- var host = baseURL.substring(0, baseURL.length - 1).replace(/\//g, '');
- if ((host === window.location.host) && (window.location.protocol !== 'https:')) {
-     window.location.protocol = 'https:';
- }
+    var baseURL = 'http:\/\/www.itchyknowsdevs.me\/';
+    var host = baseURL.substring(0, baseURL.length - 1).replace(/\//g, '');
+    if ((host === window.location.host) && (window.location.protocol !== 'https:')) {
+        window.location.protocol = 'https:';
+    }
 </script>
 
 
@@ -36,7 +36,7 @@
 <link rel="stylesheet" href="http://www.itchyknowsdevs.me/css/main.css">
 
 
-<link rel="stylesheet" href="http://www.itchyknowsdevs.me/css/override.css">
+    <link rel="stylesheet" href="http://www.itchyknowsdevs.me/css/override.css">
 
 
 
@@ -44,7 +44,7 @@
 
 <link rel="shortcut icon"
 
-      href="http://www.itchyknowsdevs.me/img/leaf.ico"
+    href="http://www.itchyknowsdevs.me/img/leaf.ico"
 
 >
 
@@ -55,144 +55,146 @@
 
 <body lang="en">
 
-    <section class="header"> 
-	<div class="container">
-            <div class="content">
-		<a href="http://www.itchyknowsdevs.me/"><div class="name">Aleksandr Guljajev</div></a>
-		<nav>
-                    <ul>
-			<a href="http://www.itchyknowsdevs.me/blog/"><li>Blog</li></a>
-			<a href="http://www.itchyknowsdevs.me/about/"><li>About</li></a>
-			<a href="http://www.itchyknowsdevs.me/code/"><li>Code</li></a>
-                    </ul>
-		</nav>
+<section class="header"> 
+    <div class="container">
+        <div class="content">
+            <a href="http://www.itchyknowsdevs.me/"><div class="name">Aleksandr Guljajev</div></a>
+            <nav>
+                <ul>
+                    <a href="http://www.itchyknowsdevs.me/blog/"><li>Blog</li></a>
+                    <a href="http://www.itchyknowsdevs.me/about/"><li>About</li></a>
+                    <a href="http://www.itchyknowsdevs.me/code/"><li>Code</li></a>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</section>
+
+<section class="icons">
+    <div class="container">
+        <div class="content">
+
+        
+            <a href="//github.com/alex-glv" target="_blank">
+                <i class="icon ion-social-github"></i>
+            </a>
+        
+        
+        
+            <a href="//twitter.com/jaleks_" target="_blank">
+                <i class="icon ion-social-twitter"></i>
+            </a>
+        
+
+        
+            <a href="//linkedin.com/in/aleksadr-guljajev-a17941a6" target="_blank">
+                <i class="icon ion-social-linkedin"></i>
+            </a>
+        
+
+        
+
+        
+
+        
+        </div>
+    </div>
+</section>
+
+
+<section class="main post non-narrow zero-top-spacing">
+    <div class="container">
+        <div class="content">
+            <div class="front-matter">
+                <div class="title-container">
+                    <div class="page-heading">
+
+    Developing Golang in NixOS
+
+</div>
+
+                    <div class="initials"><a href="http://www.itchyknowsdevs.me/">ag</a></div>
+                </div>
+                <div class="meta">
+                    <div class="date" title="Fri Mar 18 2016 00:00:00 UTC">Mar 18, 2016</div>
+                    <div class="reading-time"><div class="middot"></div>3 minutes read</div>
+                </div>
             </div>
-	</div>
-    </section>
-
-    <section class="icons">
-	<div class="container">
-            <div class="content">
-
-        
-		<a href="//github.com/alex-glv" target="_blank">
-                    <i class="icon ion-social-github"></i>
-		</a>
-        
-        
-        
-		<a href="//twitter.com/jaleks_" target="_blank">
-                    <i class="icon ion-social-twitter"></i>
-		</a>
-        
-
-        
-		<a href="//linkedin.com/in/aleksadr-guljajev-a17941a6" target="_blank">
-                    <i class="icon ion-social-linkedin"></i>
-		</a>
-        
-
-        
-
-        
-
-        
-            </div>
-	</div>
-    </section>
-
-
-    <section class="main post non-narrow zero-top-spacing">
-	<div class="container">
-            <div class="content">
-		<div class="front-matter">
-                    <div class="title-container">
-			<div class="page-heading">
-
-			    Developing golang in NixOS
-
-			</div>
-
-			<div class="initials"><a href="http://www.itchyknowsdevs.me/">ag</a></div>
-                    </div>
-                    <div class="meta">
-			<div class="date" title="Fri Mar 18 2016 00:00:00 UTC">Mar 18, 2016</div>
-			<div class="reading-time"><div class="middot"></div>3 minutes read</div>
-                    </div>
-		</div>
-		<div class="markdown">
+            <div class="markdown">
                 
 
-		    <h1 id="why-nixos:e2b73a651c59252a5565288c4b4fcc8f">Why NixOS?</h1>
+<h1 id="why-nixos">Why NixOS?</h1>
 
-		    <p>The idea of fully reproducible system fascinates me a lot.
-			Part of Getting Things Done philosophy is not to contaminate your head with the little things you have to do, you put them down on a list.
-			That&rsquo;s why we use password managers, because you don&rsquo;t want to keep all those password from a bazillion websites in your head - you trust something else to keep them.
-			With you development environment it&rsquo;s the same - you build your custom machine and when your drive goes bust, you go: &ldquo;Oh, shit.. When&rsquo;s my latest backup, again?&rdquo;
-			That&rsquo;s why you check in your OS configuration.
-			NixOS eliminates this issue 99% so you have even less to worry about.</p>
+<p>The idea of fully reproducible system fascinates me a lot.
+Part of Getting Things Done philosophy is not to contaminate your head with the little things you have to do, you put them down on a list.</p>
 
-		    <p>Take a look, <a href="https://github.com/alex-glv/nixos-conf">this is my OS</a> - all the software I use, my user user account, services - everything.
-			The only thing that I need to do to fully replicate my system on a machine is pull the config, and run <code>nixos-install</code>.</p>
+<p>That&rsquo;s why we use password managers, because you don&rsquo;t want to keep all those password from a bazillion websites in your head - you trust something else to keep them.
+With you development environment it&rsquo;s the same - you build your custom machine and when your drive goes bust, you go: &ldquo;Oh, shit.. When&rsquo;s my latest backup, again?&rdquo;</p>
 
-		    <p>This is great and all, but where&rsquo;s the catch?</p>
+<p>That&rsquo;s why you check in your OS configuration.
+NixOS eliminates this issue 99% so you have even less to worry about.</p>
 
-		    <h1 id="the-catch:e2b73a651c59252a5565288c4b4fcc8f">The Catch</h1>
+<p>Take a look, <a href="https://github.com/alex-glv/nixos-conf">this is my OS</a> - all the software I use, my user user account, services - everything.
+The only thing that I need to do to fully replicate my system on a machine is pull the config, and run <code>nixos-install</code>.</p>
 
-		    <p>NixOS comes with the Nix package manager and their its flavored language to describe those packages.
-			You most likely have never heard of Nix, it&rsquo;s not arch or OSX with Homebrew and all the packages imaginable.
-			So, you&rsquo;ll have to write some packages yourself.</p>
+<p>This is great and all, but where&rsquo;s the catch?</p>
 
-		    <h1 id="golang-dependencies:e2b73a651c59252a5565288c4b4fcc8f">Golang - dependencies</h1>
+<h1 id="the-catch">The Catch</h1>
 
-		    <p>Nix package manager is also capable of handling go dependencies, which is great, because it&rsquo;s a decent replacement for <code>go get</code>. [1]
-			However, if you want to quickly hack on a CLI tool, it gets a bit hairy: try to figure if the packages are present in the repository, if not then you have to write them yourself.
-			It&rsquo;s a bit too slow and I am not very experienced with that yet.
-			So, I prefer to use godep instead. Luckily it&rsquo;s easy to obtain with the usual <code>nix-env -i godep</code></p>
+<p>NixOS comes with the Nix package manager and their its flavored language to describe those packages.
+You most likely have never heard of Nix, it&rsquo;s not arch or OSX with Homebrew and all the packages imaginable.
+So, you&rsquo;ll have to write some packages yourself.</p>
 
-		    <h1 id="goroot-and-gopath:e2b73a651c59252a5565288c4b4fcc8f">GOROOT and GOPATH</h1>
+<h1 id="golang-dependencies">Golang - dependencies</h1>
 
-		    <p>I store my sources in a home directory, which means I also need to have $GOROOT exported to allow go tools like gofmt and gorcode to locate the standard library sources.
-			Luckily, adding extra variables to your environment is very easy in nix:</p>
+<p>Nix package manager is also capable of handling go dependencies, which is great, because it&rsquo;s a decent replacement for <code>go get</code>. [1]
+However, if you want to quickly hack on a CLI tool, it gets a bit hairy: try to figure if the packages are present in the repository, if not then you have to write them yourself.
+It&rsquo;s a bit too slow and I am not very experienced with that yet.
+So, I prefer to use godep instead. Luckily it&rsquo;s easy to obtain with the usual <code>nix-env -i godep</code></p>
 
-		    <p>Add go to your systemPackages list under your configuration.nix [2] file:</p>
+<h1 id="goroot-and-gopath">GOROOT and GOPATH</h1>
 
-		    <pre><code>environment.systemPackages = with pkgs; [
+<p>I store my sources in a home directory, which means I also need to have $GOROOT exported to allow go tools like gofmt and gorcode to locate the standard library sources.
+Luckily, adding extra variables to your environment is very easy in nix:</p>
+
+<p>Add go to your systemPackages list under your configuration.nix [2] file:</p>
+
+<pre><code>environment.systemPackages = with pkgs; [
   go
   // other pkgs
 ];
-		    </code></pre>
+</code></pre>
 
-		    <p>Then, add the extra environment variable:</p>
+<p>Then, add the extra environment variable:</p>
 
-		    <pre><code>environment.variables = { GOROOT = [ &quot;${pkgs.go.out}/share/go&quot; ]; };
-		    </code></pre>
+<pre><code>environment.variables = { GOROOT = [ &quot;${pkgs.go.out}/share/go&quot; ]; };
+</code></pre>
 
-		    <p>This ensures your GOROOT will always point to standard library sources directory.
-			Adding GOPATH is very similar, however I tend to store it in my bashrc somewher under dotfiles.</p>
+<p>This ensures your GOROOT will always point to standard library sources directory.
+Adding GOPATH is very similar, however I tend to store it in my bashrc somewher under dotfiles.</p>
 
-		    <h1 id="balance:e2b73a651c59252a5565288c4b4fcc8f">Balance</h1>
+<h1 id="balance">Balance</h1>
 
-		    <p>I found a good compromise between reproducible system and convenience to use it.
-			You can have godep and gocode fully working with the necessary environment variables set, and also have these settings stored under nix configuration file.</p>
+<p>I found a good compromise between reproducible system and convenience to use it.
+You can have godep and gocode fully working with the necessary environment variables set, and also have these settings stored under nix configuration file.</p>
 
-		    <h1 id="footnotes:e2b73a651c59252a5565288c4b4fcc8f">Footnotes</h1>
+<h1 id="footnotes">Footnotes</h1>
 
-		    <ul>
-			<li><a href="http://lethalman.blogspot.nl/2015/02/developing-in-golang-with-nix-package.html">Developing in golang with nix package</a></li>
-			<li><a href="https://nixos.org/nixos/manual/index.html#sec-changing-config">NixOS manual: changing configuration</a></li>
-		    </ul>
+<ul>
+<li><a href="http://lethalman.blogspot.nl/2015/02/developing-in-golang-with-nix-package.html">Developing in golang with nix package</a></li>
+<li><a href="https://nixos.org/nixos/manual/index.html#sec-changing-config">NixOS manual: changing configuration</a></li>
+</ul>
 
-                    <br>
-                    <p><a href="http://www.itchyknowsdevs.me/blog/">Back to posts</a></p>
-		</div>
-		<br>
-		<div class="disqus">
-                
-		</div>
+                <br>
+                <p><a href="http://www.itchyknowsdevs.me/blog/">Back to posts</a></p>
             </div>
-	</div>
-    </section>
+            <br>
+            <div class="disqus">
+                
+            </div>
+        </div>
+    </div>
+</section>
 
 
 

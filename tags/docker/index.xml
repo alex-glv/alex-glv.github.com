@@ -17,7 +17,7 @@
       <guid>http://www.itchyknowsdevs.me/post/containers-are-not-real/</guid>
       <description>
 
-&lt;h1 id=&#34;the-advent-of-containers:c8e2a09ea174ff8e7c9537b614f3c385&#34;&gt;The advent of containers&lt;/h1&gt;
+&lt;h1 id=&#34;the-advent-of-containers&#34;&gt;The advent of containers&lt;/h1&gt;
 
 &lt;p&gt;Containers seem to have turned the industry upside down and marching full ahead to become the dominant way of shipping software.
 To uninitiated mortals, Docker seems to be kind of a strange child.
@@ -29,7 +29,7 @@ Even though it gained a massive traction, it still has a long way to go to be a 
 
 &lt;p&gt;We will be creating our own busybox container!&lt;/p&gt;
 
-&lt;h1 id=&#34;namespaces:c8e2a09ea174ff8e7c9537b614f3c385&#34;&gt;Namespaces&lt;/h1&gt;
+&lt;h1 id=&#34;namespaces&#34;&gt;Namespaces&lt;/h1&gt;
 
 &lt;p&gt;To create illusion of a container, Docker (and alike) utilizes Linux kernel feature - namespaces.&lt;/p&gt;
 
@@ -54,11 +54,11 @@ Interesting thing that if you search for words &amp;ldquo;containers&amp;rdquo; 
 This is it, the containers don&amp;rsquo;t actually exist, they are not real, we make them real.
 Since the genie is out of the bottle now, let&amp;rsquo;s recreate a busybox container from scratch.&lt;/p&gt;
 
-&lt;h1 id=&#34;prerequisites:c8e2a09ea174ff8e7c9537b614f3c385&#34;&gt;Prerequisites&lt;/h1&gt;
+&lt;h1 id=&#34;prerequisites&#34;&gt;Prerequisites&lt;/h1&gt;
 
 &lt;p&gt;I am using DigitalOcean with a clean Ubuntu 15.10 virtual machine, and nothing more, so you can easily reproduce the results.&lt;/p&gt;
 
-&lt;h1 id=&#34;network-interfaces:c8e2a09ea174ff8e7c9537b614f3c385&#34;&gt;Network interfaces&lt;/h1&gt;
+&lt;h1 id=&#34;network-interfaces&#34;&gt;Network interfaces&lt;/h1&gt;
 
 &lt;p&gt;Containers wouldn&amp;rsquo;t be very interesting if they didn&amp;rsquo;t have access to the internet.
 It&amp;rsquo;s like lego bricks without the studs (&amp;ldquo;stud&amp;rdquo; seems to be an official term to call those little pimples on Lego bricks &lt;a href=&#34;http://thebrickblogger.com/2010/11/lego-disctionary-basic-term/&#34;&gt;http://thebrickblogger.com/2010/11/lego-disctionary-basic-term/&lt;/a&gt;).&lt;/p&gt;
@@ -122,7 +122,7 @@ ip netns exec container ip route add  default via 10.0.0.1
 
 &lt;p&gt;OK, we&amp;rsquo;ve managed the hard part, let&amp;rsquo;s create our container&amp;rsquo;s file system and do the rest of the housekeeping&lt;/p&gt;
 
-&lt;h1 id=&#34;enter-the-namespace:c8e2a09ea174ff8e7c9537b614f3c385&#34;&gt;Enter the namespace&lt;/h1&gt;
+&lt;h1 id=&#34;enter-the-namespace&#34;&gt;Enter the namespace&lt;/h1&gt;
 
 &lt;p&gt;Let&amp;rsquo;s enter the configured network namespace:&lt;/p&gt;
 
@@ -163,7 +163,7 @@ If you run:&lt;/p&gt;
 
 &lt;p&gt;You should see 1, it means that our process has process id 1 on the system.&lt;/p&gt;
 
-&lt;h1 id=&#34;conclusion:c8e2a09ea174ff8e7c9537b614f3c385&#34;&gt;Conclusion&lt;/h1&gt;
+&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
 
 &lt;p&gt;Hopefully, this post has shed some light on the mystery of containers.
 We learned to unshare namespaces, create network configuration that allows access to the internet and create a secure environment isolated from the global state of the host.&lt;/p&gt;

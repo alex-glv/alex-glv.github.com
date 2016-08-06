@@ -123,7 +123,7 @@
             <div class="markdown">
                 
 
-<h1 id="the-problem:a1ec05e051105cb1bb5549ae149fdde7">The Problem</h1>
+<h1 id="the-problem">The Problem</h1>
 
 <p>I love static website generators. I think it&rsquo;s a great iteration over the old approach before dynamic websites became a de-facto standard.</p>
 
@@ -134,14 +134,14 @@ The only thing you need is a web server and a domain name.</p>
 
 <p>Make changes, test locally, push, make a sandwich and reflect on eternity of consciousness in the Universe. The changes are live. Ah, beautiful.</p>
 
-<h1 id="inspiration:a1ec05e051105cb1bb5549ae149fdde7">Inspiration</h1>
+<h1 id="inspiration">Inspiration</h1>
 
 <p>My approach was inspired by <a href="bezdelev.com/post/hugo-aws-lambda-static-website/">this blogpost</a>.
 I though, huh, this is cool. Then I set it up and quickly realised its shortcoming: manual S3 website upload.</p>
 
 <p>I decided to take it a step further and integrate the process with GitHub.</p>
 
-<h1 id="prerequisites-process:a1ec05e051105cb1bb5549ae149fdde7">Prerequisites &amp; process</h1>
+<h1 id="prerequisites-process">Prerequisites &amp; process</h1>
 
 <p>Some familiarity with AWS is required.</p>
 
@@ -164,7 +164,7 @@ I though, huh, this is cool. Then I set it up and quickly realised its shortcomi
 <li>I have configured AWS SNS with GitHub WebHooks. Each commit is trigering SNS which in turn is configured as AWS Lambda event source.</li>
 </ul>
 
-<h1 id="introducing-github-hugo-lambda-integration-project:a1ec05e051105cb1bb5549ae149fdde7">Introducing GitHub-Hugo-Lambda integration project</h1>
+<h1 id="introducing-github-hugo-lambda-integration-project">Introducing GitHub-Hugo-Lambda integration project</h1>
 
 <p><a href="https://github.com/alex-glv/github-hugo-lambda">Github Hugo Lambda</a> project should do most of the configuration for you.
 It will initialise Node dependencies, create Lambda code package and upload it on Amazon AWS Lambda.
@@ -208,7 +208,7 @@ After this has been completed, go to Lambda configuration page, add Event source
 
 <p>You can rune the test by clicking &ldquo;Test service&rdquo; from the Github webhooks page and it will send the test payload.</p>
 
-<h1 id="conclusion:a1ec05e051105cb1bb5549ae149fdde7">Conclusion</h1>
+<h1 id="conclusion">Conclusion</h1>
 
 <p>Hopefully this post and project help you to streamline creation of simple static websites.
 Configured once, deployment will be fully automated and you can concentrate on creating value rather than worrying how to publish your website changes.</p>

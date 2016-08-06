@@ -106,7 +106,7 @@
         <div class="content">
             
 
-<h1 id="the-advent-of-containers:c8e2a09ea174ff8e7c9537b614f3c385">The advent of containers</h1>
+<h1 id="the-advent-of-containers">The advent of containers</h1>
 
 <p>Containers seem to have turned the industry upside down and marching full ahead to become the dominant way of shipping software.
 To uninitiated mortals, Docker seems to be kind of a strange child.
@@ -118,7 +118,7 @@ Even though it gained a massive traction, it still has a long way to go to be a 
 
 <p>We will be creating our own busybox container!</p>
 
-<h1 id="namespaces:c8e2a09ea174ff8e7c9537b614f3c385">Namespaces</h1>
+<h1 id="namespaces">Namespaces</h1>
 
 <p>To create illusion of a container, Docker (and alike) utilizes Linux kernel feature - namespaces.</p>
 
@@ -143,11 +143,11 @@ Interesting thing that if you search for words &ldquo;containers&rdquo; in linux
 This is it, the containers don&rsquo;t actually exist, they are not real, we make them real.
 Since the genie is out of the bottle now, let&rsquo;s recreate a busybox container from scratch.</p>
 
-<h1 id="prerequisites:c8e2a09ea174ff8e7c9537b614f3c385">Prerequisites</h1>
+<h1 id="prerequisites">Prerequisites</h1>
 
 <p>I am using DigitalOcean with a clean Ubuntu 15.10 virtual machine, and nothing more, so you can easily reproduce the results.</p>
 
-<h1 id="network-interfaces:c8e2a09ea174ff8e7c9537b614f3c385">Network interfaces</h1>
+<h1 id="network-interfaces">Network interfaces</h1>
 
 <p>Containers wouldn&rsquo;t be very interesting if they didn&rsquo;t have access to the internet.
 It&rsquo;s like lego bricks without the studs (&ldquo;stud&rdquo; seems to be an official term to call those little pimples on Lego bricks <a href="http://thebrickblogger.com/2010/11/lego-disctionary-basic-term/">http://thebrickblogger.com/2010/11/lego-disctionary-basic-term/</a>).</p>
@@ -211,7 +211,7 @@ ip netns exec container ip route add  default via 10.0.0.1
 
 <p>OK, we&rsquo;ve managed the hard part, let&rsquo;s create our container&rsquo;s file system and do the rest of the housekeeping</p>
 
-<h1 id="enter-the-namespace:c8e2a09ea174ff8e7c9537b614f3c385">Enter the namespace</h1>
+<h1 id="enter-the-namespace">Enter the namespace</h1>
 
 <p>Let&rsquo;s enter the configured network namespace:</p>
 
@@ -252,7 +252,7 @@ If you run:</p>
 
 <p>You should see 1, it means that our process has process id 1 on the system.</p>
 
-<h1 id="conclusion:c8e2a09ea174ff8e7c9537b614f3c385">Conclusion</h1>
+<h1 id="conclusion">Conclusion</h1>
 
 <p>Hopefully, this post has shed some light on the mystery of containers.
 We learned to unshare namespaces, create network configuration that allows access to the internet and create a secure environment isolated from the global state of the host.</p>

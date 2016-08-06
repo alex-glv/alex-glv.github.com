@@ -6,24 +6,145 @@
     <description>Recent content in Blog on Aleksandr Guljajev</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
-    <lastBuildDate>Fri, 18 Mar 2016 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 08 May 2016 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://www.itchyknowsdevs.me/blog/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>Developing golang in NixOS</title>
+      <title>Refactoring business-critical PHP application with RabbitMQ</title>
+      <link>http://www.itchyknowsdevs.me/blog/refactoring-business-critical-php-application-with-rabbitmq/</link>
+      <pubDate>Sun, 08 May 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.itchyknowsdevs.me/blog/refactoring-business-critical-php-application-with-rabbitmq/</guid>
+      <description>
+
+&lt;p&gt;NB: Code accompanying the post is on &lt;a href=&#34;https://github.com/alex-glv/bunny-acme&#34;&gt;github.com/alex-glv/bunny-acme&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;the-problem&#34;&gt;The Problem&lt;/h1&gt;
+
+&lt;p&gt;While doing contract work optimizing and improving stability of an old PHP-based billing application I was constantly facing issues with long running processes that failed and couldn&amp;rsquo;t easily restore their state.&lt;/p&gt;
+
+&lt;p&gt;The actual process was performing daily billing services based on subscription rules.&lt;/p&gt;
+
+&lt;p&gt;The process would start, extract a whole bunch of information at once and start processing it one by one, withou keeping an intermediate progress results.&lt;/p&gt;
+
+&lt;p&gt;It would take input and produce side effects, churning along as it goes through.&lt;/p&gt;
+
+&lt;p&gt;Imagine a manufacturing process. You probably see a conveyer belt and items at various stages being combined with other items through molding and fusing and cooling and whatnot.&lt;/p&gt;
+
+&lt;p&gt;What you don&amp;rsquo;t imagine is a room with closed doors, someone puts all the required ingredients at once through a narrow window. They&amp;rsquo;re being ingested and rumbling and grumbling starts. In 3 hours your side-effect (a manufactured item) is spit out.&lt;/p&gt;
+
+&lt;p&gt;This is fine until it isn&amp;rsquo;t and something breaks.
+If something breaks, you want to know exactly where it happened by looking at the intermediate state.&lt;/p&gt;
+
+&lt;h1 id=&#34;solution-queues-to-the-rescue&#34;&gt;Solution: queues to the rescue&lt;/h1&gt;
+
+&lt;p&gt;I decided to break down the process by introducing queues. Simply because I wanted to learn about queues and thought it would be a great way to break the complexity of the system.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;If you are not using queues extensively, you should start right away
+- Rich Hickey&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;I was vaguely familiar with RabbitMQ and after reading some documentation decided it was a good fit.&lt;/p&gt;
+
+&lt;h1 id=&#34;amqp-the-messaging-protocol&#34;&gt;AMQP - the messaging protocol&lt;/h1&gt;
+
+&lt;p&gt;AMQP is a flexible messaging protocol. It defines basic roles and entities involved in the message lifecycle.
+This is the standart that RabbitMQ conforms to. There&amp;rsquo;s a great introduction article on RabbitMQ[1] website that will help you with the basics. It&amp;rsquo;s a prerequisite to using RabbitMQ.&lt;/p&gt;
+
+&lt;p&gt;You don&amp;rsquo;t want to lose all your messages in the queue if all of your subscribers go down, so you have to specify appropriate options.&lt;/p&gt;
+
+&lt;h1 id=&#34;define-roles-workers-producers-and-messages&#34;&gt;Define roles - workers, producers and messages&lt;/h1&gt;
+
+&lt;p&gt;You have to break down the service into multiple roles.
+Recurring billing service might be broken down in multiple stages like:
+- Find subscriptions due to be billed
+- Eliminate expired credit card records
+- Eliminate records that have cancelled their billing preferences and opted out
+- Schedule all the rest&lt;/p&gt;
+
+&lt;p&gt;The last item will be our &amp;ldquo;messages&amp;rdquo;.
+We&amp;rsquo;ll send the user data over the queue system to the other side, where it will be picked up by our workers.&lt;/p&gt;
+
+&lt;p&gt;Workers will be the following:
+- Biller
+- Deactivator&lt;/p&gt;
+
+&lt;p&gt;Biller will try to perform the charge and Deactivator will manage the account suspension.&lt;/p&gt;
+
+&lt;p&gt;This approach solves a couple of issue:
+- Scalability: we are able to attach multiple workers for each role and easily scale our throughput
+- Separation of concerns: our small services will each reside in their own space and will be neatly separated
+- Refactoring space: it becomes easier to reason about the component potentially allows better deployment strategies. In addition, testing becames much simpler with having less mocks, because we&amp;rsquo;ll offsource a lot of work on our messaging platform. You can swap your queue driver implementation and implement dummy workers.&lt;/p&gt;
+
+&lt;h1 id=&#34;considerations&#34;&gt;Considerations&lt;/h1&gt;
+
+&lt;p&gt;Having workers sitting and waiting for work to do means that the process will be long lived with all the implications.
+You have to support the lifecycle, make sure the processes are started if they go down and try to eliminate all possible memory leaks.&lt;/p&gt;
+
+&lt;p&gt;I have been using supervisord[2] to manage the processes.&lt;/p&gt;
+
+&lt;h1 id=&#34;queue-listeners&#34;&gt;Queue listeners&lt;/h1&gt;
+
+&lt;p&gt;Here&amp;rsquo;s an example of a long lived queue listener:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;?php
+    [...]
+    protected function listen($queueName) {
+        /** @var \BunnyAcme\Queue\Driver\Driver $driver */
+        $workers = $this-&amp;gt;queueManager-&amp;gt;getWorkers($queueName);
+        $driver = $this-&amp;gt;queueManager-&amp;gt;getDriver(); // this will be AMQP driver
+
+        $driver-&amp;gt;listen($queueName, $workers); // listen will block
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here, getWorkers() method will return all the instances and of workers responding to our queue name.
+The underlying structure is an associative array where the index is the queue name and the value is the implementation class that conforms to the Worker interface.
+Simple worker interface:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;?php
+
+namespace BunnyAcme\Queue\Workers;
+
+interface Worker {
+    public function __construct($container);
+    public function handleJob($payload);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
+
+&lt;p&gt;Using queues in general and RabbitMQ specifically maintaining large components became much easier.
+Also, implementing new services is quite simple, just implement a worker and a producer and let the RabbitMQ manage the rest.&lt;/p&gt;
+
+&lt;h1 id=&#34;resources&#34;&gt;Resources&lt;/h1&gt;
+
+&lt;p&gt;To ease the transition to using queues I have written a simple queue wrapper library that shows basic abstractions and a demo worker implementation [3]&lt;/p&gt;
+
+&lt;p&gt;[1] - &lt;a href=&#34;https://www.rabbitmq.com/tutorials/amqp-concepts.html&#34;&gt;https://www.rabbitmq.com/tutorials/amqp-concepts.html&lt;/a&gt;
+[2] - &lt;a href=&#34;http://supervisord.org/&#34;&gt;http://supervisord.org/&lt;/a&gt;
+[3] - &lt;a href=&#34;https://github.com/alex-glv/bunnyacme/blob/master/src/Queue/Workers/SleepyWorker.php&#34;&gt;https://github.com/alex-glv/bunnyacme/blob/master/src/Queue/Workers/SleepyWorker.php&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Developing Golang in NixOS</title>
       <link>http://www.itchyknowsdevs.me/blog/developing-golang-in-nixos/</link>
       <pubDate>Fri, 18 Mar 2016 00:00:00 +0000</pubDate>
       
       <guid>http://www.itchyknowsdevs.me/blog/developing-golang-in-nixos/</guid>
       <description>
 
-&lt;h1 id=&#34;why-nixos:e2b73a651c59252a5565288c4b4fcc8f&#34;&gt;Why NixOS?&lt;/h1&gt;
+&lt;h1 id=&#34;why-nixos&#34;&gt;Why NixOS?&lt;/h1&gt;
 
 &lt;p&gt;The idea of fully reproducible system fascinates me a lot.
-Part of Getting Things Done philosophy is not to contaminate your head with the little things you have to do, you put them down on a list.
-That&amp;rsquo;s why we use password managers, because you don&amp;rsquo;t want to keep all those password from a bazillion websites in your head - you trust something else to keep them.
-With you development environment it&amp;rsquo;s the same - you build your custom machine and when your drive goes bust, you go: &amp;ldquo;Oh, shit.. When&amp;rsquo;s my latest backup, again?&amp;rdquo;
-That&amp;rsquo;s why you check in your OS configuration.
+Part of Getting Things Done philosophy is not to contaminate your head with the little things you have to do, you put them down on a list.&lt;/p&gt;
+
+&lt;p&gt;That&amp;rsquo;s why we use password managers, because you don&amp;rsquo;t want to keep all those password from a bazillion websites in your head - you trust something else to keep them.
+With you development environment it&amp;rsquo;s the same - you build your custom machine and when your drive goes bust, you go: &amp;ldquo;Oh, shit.. When&amp;rsquo;s my latest backup, again?&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;That&amp;rsquo;s why you check in your OS configuration.
 NixOS eliminates this issue 99% so you have even less to worry about.&lt;/p&gt;
 
 &lt;p&gt;Take a look, &lt;a href=&#34;https://github.com/alex-glv/nixos-conf&#34;&gt;this is my OS&lt;/a&gt; - all the software I use, my user user account, services - everything.
@@ -31,20 +152,20 @@ The only thing that I need to do to fully replicate my system on a machine is pu
 
 &lt;p&gt;This is great and all, but where&amp;rsquo;s the catch?&lt;/p&gt;
 
-&lt;h1 id=&#34;the-catch:e2b73a651c59252a5565288c4b4fcc8f&#34;&gt;The Catch&lt;/h1&gt;
+&lt;h1 id=&#34;the-catch&#34;&gt;The Catch&lt;/h1&gt;
 
 &lt;p&gt;NixOS comes with the Nix package manager and their its flavored language to describe those packages.
 You most likely have never heard of Nix, it&amp;rsquo;s not arch or OSX with Homebrew and all the packages imaginable.
 So, you&amp;rsquo;ll have to write some packages yourself.&lt;/p&gt;
 
-&lt;h1 id=&#34;golang-dependencies:e2b73a651c59252a5565288c4b4fcc8f&#34;&gt;Golang - dependencies&lt;/h1&gt;
+&lt;h1 id=&#34;golang-dependencies&#34;&gt;Golang - dependencies&lt;/h1&gt;
 
 &lt;p&gt;Nix package manager is also capable of handling go dependencies, which is great, because it&amp;rsquo;s a decent replacement for &lt;code&gt;go get&lt;/code&gt;. [1]
 However, if you want to quickly hack on a CLI tool, it gets a bit hairy: try to figure if the packages are present in the repository, if not then you have to write them yourself.
 It&amp;rsquo;s a bit too slow and I am not very experienced with that yet.
 So, I prefer to use godep instead. Luckily it&amp;rsquo;s easy to obtain with the usual &lt;code&gt;nix-env -i godep&lt;/code&gt;&lt;/p&gt;
 
-&lt;h1 id=&#34;goroot-and-gopath:e2b73a651c59252a5565288c4b4fcc8f&#34;&gt;GOROOT and GOPATH&lt;/h1&gt;
+&lt;h1 id=&#34;goroot-and-gopath&#34;&gt;GOROOT and GOPATH&lt;/h1&gt;
 
 &lt;p&gt;I store my sources in a home directory, which means I also need to have $GOROOT exported to allow go tools like gofmt and gorcode to locate the standard library sources.
 Luckily, adding extra variables to your environment is very easy in nix:&lt;/p&gt;
@@ -65,12 +186,12 @@ Luckily, adding extra variables to your environment is very easy in nix:&lt;/p&g
 &lt;p&gt;This ensures your GOROOT will always point to standard library sources directory.
 Adding GOPATH is very similar, however I tend to store it in my bashrc somewher under dotfiles.&lt;/p&gt;
 
-&lt;h1 id=&#34;balance:e2b73a651c59252a5565288c4b4fcc8f&#34;&gt;Balance&lt;/h1&gt;
+&lt;h1 id=&#34;balance&#34;&gt;Balance&lt;/h1&gt;
 
 &lt;p&gt;I found a good compromise between reproducible system and convenience to use it.
 You can have godep and gocode fully working with the necessary environment variables set, and also have these settings stored under nix configuration file.&lt;/p&gt;
 
-&lt;h1 id=&#34;footnotes:e2b73a651c59252a5565288c4b4fcc8f&#34;&gt;Footnotes&lt;/h1&gt;
+&lt;h1 id=&#34;footnotes&#34;&gt;Footnotes&lt;/h1&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;http://lethalman.blogspot.nl/2015/02/developing-in-golang-with-nix-package.html&#34;&gt;Developing in golang with nix package&lt;/a&gt;&lt;/li&gt;
@@ -87,7 +208,7 @@ You can have godep and gocode fully working with the necessary environment varia
       <guid>http://www.itchyknowsdevs.me/blog/hugo-on-amazon-aws-lambda-integrated-with-github/</guid>
       <description>
 
-&lt;h1 id=&#34;the-problem:a1ec05e051105cb1bb5549ae149fdde7&#34;&gt;The Problem&lt;/h1&gt;
+&lt;h1 id=&#34;the-problem&#34;&gt;The Problem&lt;/h1&gt;
 
 &lt;p&gt;I love static website generators. I think it&amp;rsquo;s a great iteration over the old approach before dynamic websites became a de-facto standard.&lt;/p&gt;
 
@@ -98,14 +219,14 @@ The only thing you need is a web server and a domain name.&lt;/p&gt;
 
 &lt;p&gt;Make changes, test locally, push, make a sandwich and reflect on eternity of consciousness in the Universe. The changes are live. Ah, beautiful.&lt;/p&gt;
 
-&lt;h1 id=&#34;inspiration:a1ec05e051105cb1bb5549ae149fdde7&#34;&gt;Inspiration&lt;/h1&gt;
+&lt;h1 id=&#34;inspiration&#34;&gt;Inspiration&lt;/h1&gt;
 
 &lt;p&gt;My approach was inspired by &lt;a href=&#34;bezdelev.com/post/hugo-aws-lambda-static-website/&#34;&gt;this blogpost&lt;/a&gt;.
 I though, huh, this is cool. Then I set it up and quickly realised its shortcoming: manual S3 website upload.&lt;/p&gt;
 
 &lt;p&gt;I decided to take it a step further and integrate the process with GitHub.&lt;/p&gt;
 
-&lt;h1 id=&#34;prerequisites-process:a1ec05e051105cb1bb5549ae149fdde7&#34;&gt;Prerequisites &amp;amp; process&lt;/h1&gt;
+&lt;h1 id=&#34;prerequisites-process&#34;&gt;Prerequisites &amp;amp; process&lt;/h1&gt;
 
 &lt;p&gt;Some familiarity with AWS is required.&lt;/p&gt;
 
@@ -128,7 +249,7 @@ I though, huh, this is cool. Then I set it up and quickly realised its shortcomi
 &lt;li&gt;I have configured AWS SNS with GitHub WebHooks. Each commit is trigering SNS which in turn is configured as AWS Lambda event source.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h1 id=&#34;introducing-github-hugo-lambda-integration-project:a1ec05e051105cb1bb5549ae149fdde7&#34;&gt;Introducing GitHub-Hugo-Lambda integration project&lt;/h1&gt;
+&lt;h1 id=&#34;introducing-github-hugo-lambda-integration-project&#34;&gt;Introducing GitHub-Hugo-Lambda integration project&lt;/h1&gt;
 
 &lt;p&gt;&lt;a href=&#34;https://github.com/alex-glv/github-hugo-lambda&#34;&gt;Github Hugo Lambda&lt;/a&gt; project should do most of the configuration for you.
 It will initialise Node dependencies, create Lambda code package and upload it on Amazon AWS Lambda.
@@ -172,7 +293,7 @@ After this has been completed, go to Lambda configuration page, add Event source
 
 &lt;p&gt;You can rune the test by clicking &amp;ldquo;Test service&amp;rdquo; from the Github webhooks page and it will send the test payload.&lt;/p&gt;
 
-&lt;h1 id=&#34;conclusion:a1ec05e051105cb1bb5549ae149fdde7&#34;&gt;Conclusion&lt;/h1&gt;
+&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
 
 &lt;p&gt;Hopefully this post and project help you to streamline creation of simple static websites.
 Configured once, deployment will be fully automated and you can concentrate on creating value rather than worrying how to publish your website changes.&lt;/p&gt;
@@ -187,7 +308,7 @@ Configured once, deployment will be fully automated and you can concentrate on c
       <guid>http://www.itchyknowsdevs.me/blog/containers-are-not-real/</guid>
       <description>
 
-&lt;h1 id=&#34;the-advent-of-containers:c8e2a09ea174ff8e7c9537b614f3c385&#34;&gt;The advent of containers&lt;/h1&gt;
+&lt;h1 id=&#34;the-advent-of-containers&#34;&gt;The advent of containers&lt;/h1&gt;
 
 &lt;p&gt;Containers seem to have turned the industry upside down and marching full ahead to become the dominant way of shipping software.
 To uninitiated mortals, Docker seems to be kind of a strange child.
@@ -199,7 +320,7 @@ Even though it gained a massive traction, it still has a long way to go to be a 
 
 &lt;p&gt;We will be creating our own busybox container!&lt;/p&gt;
 
-&lt;h1 id=&#34;namespaces:c8e2a09ea174ff8e7c9537b614f3c385&#34;&gt;Namespaces&lt;/h1&gt;
+&lt;h1 id=&#34;namespaces&#34;&gt;Namespaces&lt;/h1&gt;
 
 &lt;p&gt;To create illusion of a container, Docker (and alike) utilizes Linux kernel feature - namespaces.&lt;/p&gt;
 
@@ -224,11 +345,11 @@ Interesting thing that if you search for words &amp;ldquo;containers&amp;rdquo; 
 This is it, the containers don&amp;rsquo;t actually exist, they are not real, we make them real.
 Since the genie is out of the bottle now, let&amp;rsquo;s recreate a busybox container from scratch.&lt;/p&gt;
 
-&lt;h1 id=&#34;prerequisites:c8e2a09ea174ff8e7c9537b614f3c385&#34;&gt;Prerequisites&lt;/h1&gt;
+&lt;h1 id=&#34;prerequisites&#34;&gt;Prerequisites&lt;/h1&gt;
 
 &lt;p&gt;I am using DigitalOcean with a clean Ubuntu 15.10 virtual machine, and nothing more, so you can easily reproduce the results.&lt;/p&gt;
 
-&lt;h1 id=&#34;network-interfaces:c8e2a09ea174ff8e7c9537b614f3c385&#34;&gt;Network interfaces&lt;/h1&gt;
+&lt;h1 id=&#34;network-interfaces&#34;&gt;Network interfaces&lt;/h1&gt;
 
 &lt;p&gt;Containers wouldn&amp;rsquo;t be very interesting if they didn&amp;rsquo;t have access to the internet.
 It&amp;rsquo;s like lego bricks without the studs (&amp;ldquo;stud&amp;rdquo; seems to be an official term to call those little pimples on Lego bricks &lt;a href=&#34;http://thebrickblogger.com/2010/11/lego-disctionary-basic-term/&#34;&gt;http://thebrickblogger.com/2010/11/lego-disctionary-basic-term/&lt;/a&gt;).&lt;/p&gt;
@@ -292,7 +413,7 @@ ip netns exec container ip route add  default via 10.0.0.1
 
 &lt;p&gt;OK, we&amp;rsquo;ve managed the hard part, let&amp;rsquo;s create our container&amp;rsquo;s file system and do the rest of the housekeeping&lt;/p&gt;
 
-&lt;h1 id=&#34;enter-the-namespace:c8e2a09ea174ff8e7c9537b614f3c385&#34;&gt;Enter the namespace&lt;/h1&gt;
+&lt;h1 id=&#34;enter-the-namespace&#34;&gt;Enter the namespace&lt;/h1&gt;
 
 &lt;p&gt;Let&amp;rsquo;s enter the configured network namespace:&lt;/p&gt;
 
@@ -333,10 +454,54 @@ If you run:&lt;/p&gt;
 
 &lt;p&gt;You should see 1, it means that our process has process id 1 on the system.&lt;/p&gt;
 
-&lt;h1 id=&#34;conclusion:c8e2a09ea174ff8e7c9537b614f3c385&#34;&gt;Conclusion&lt;/h1&gt;
+&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
 
 &lt;p&gt;Hopefully, this post has shed some light on the mystery of containers.
 We learned to unshare namespaces, create network configuration that allows access to the internet and create a secure environment isolated from the global state of the host.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://www.itchyknowsdevs.me/blog/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.itchyknowsdevs.me/blog/</guid>
+      <description>
+
+&lt;h1 id=&#34;testing-api-in-microservices-era&#34;&gt;Testing API in microservices era&lt;/h1&gt;
+
+&lt;p&gt;With the advent of microservices and distributed scalable systems REST API seems to be the most popular choice for enabling communication between the services that comprise the application.&lt;/p&gt;
+
+&lt;p&gt;Surely, REST has proven to be valuable and relatively easy to implement because it relies on HTTP as a transport layer, its status codes and action verbs (GET, POST, DELETE) for indicating the status of operation calls.&lt;/p&gt;
+
+&lt;h1 id=&#34;challenges&#34;&gt;Challenges&lt;/h1&gt;
+
+&lt;p&gt;Implementing the API is one thing, how does one go about testing?&lt;/p&gt;
+
+&lt;p&gt;With microservices, you are not bound to a single technology stack.
+Multiple teams working with their own technologies to implement APIs to communicate with other services, which means systematic tests have to be solved on the higher level.&lt;/p&gt;
+
+&lt;p&gt;So, what&amp;rsquo;s the de-facto standard for testing the APIs in the microservices era?&lt;/p&gt;
+
+&lt;h1 id=&#34;specification&#34;&gt;Specification&lt;/h1&gt;
+
+&lt;p&gt;To make sure that your services play nice with each other speccing out your APIs is a good start.&lt;/p&gt;
+
+&lt;p&gt;You can start with manually describing what data structures the API consumes and produces.
+Having the specification has another benefit - it&amp;rsquo;s trivial enough to generate client and server code for different languages.
+Specification also allows you to generate mocks for testing your services.&lt;/p&gt;
+
+&lt;h1 id=&#34;here-s-how-we-go-about-testing-our-microservices-step-1&#34;&gt;Here&amp;rsquo;s how we go about testing our microservices, step 1&lt;/h1&gt;
+
+&lt;p&gt;Dredd allows you to test the API endpoint against the specification that you wrote before.
+Once integrated into the CI pipeline, it means that changes to the microservices won&amp;rsquo;t break the client code  because it will always be validate against previously agreed specification.&lt;/p&gt;
+
+&lt;h1 id=&#34;step-2-mocks&#34;&gt;Step 2: mocks&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Something that allows you to mock out the api with some test data&amp;hellip; ?&lt;/li&gt;
+&lt;/ul&gt;
 </description>
     </item>
     
