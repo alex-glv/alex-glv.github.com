@@ -116,7 +116,7 @@
                     <div class="initials"><a href="http://www.itchyknowsdevs.me/">ag</a></div>
                 </div>
                 <div class="meta">
-                    <div class="date" title="Sun May 8 2016 00:00:00 UTC">May 8, 2016</div>
+                    <div class="date" title="Sat Aug 6 2016 00:00:00 UTC">Aug 6, 2016</div>
                     <div class="reading-time"><div class="middot"></div>4 minutes read</div>
                 </div>
             </div>
@@ -135,16 +135,18 @@
 
 <p>It would take input and produce side effects, churning along as it goes through.</p>
 
-<p>Imagine a manufacturing process. You probably see a conveyer belt and items at various stages being combined with other items through molding and fusing and cooling and whatnot.</p>
+<p>Imagine a manufacturing process in a good factory, created with the good practices in mind. A conveyer belt and items at various stages being combined with other items through molding and fusing and cooling and whatnot.</p>
 
-<p>What you don&rsquo;t imagine is a room with closed doors, someone puts all the required ingredients at once through a narrow window. They&rsquo;re being ingested and rumbling and grumbling starts. In 3 hours your side-effect (a manufactured item) is spit out.</p>
+<p>On the other hand, in a factory where good practices and standards are not followed, someone puts all the required ingredients at once through a narrow window. They&rsquo;re being ingested and rumbling and grumbling starts. In 3 hours your side-effect (a manufactured item) is spat out.</p>
 
-<p>This is fine until it isn&rsquo;t and something breaks.
-If something breaks, you want to know exactly where it happened by looking at the intermediate state.</p>
+<p>This is fine until something breaks.
+When it does, you want to know exactly where it happened by looking at the intermediate state.</p>
 
 <h1 id="solution-queues-to-the-rescue">Solution: queues to the rescue</h1>
 
 <p>I decided to break down the process by introducing queues. Simply because I wanted to learn about queues and thought it would be a great way to break the complexity of the system.</p>
+
+<p>Rich Hickey, the creator of Clojure in his famous talk &ldquo;Simple Made Easy&rdquo; said:</p>
 
 <blockquote>
 <p>If you are not using queues extensively, you should start right away
@@ -228,9 +230,11 @@ Also, implementing new services is quite simple, just implement a worker and a p
 
 <p>To ease the transition to using queues I have written a simple queue wrapper library that shows basic abstractions and a demo worker implementation [3]</p>
 
-<p>[1] - <a href="https://www.rabbitmq.com/tutorials/amqp-concepts.html">https://www.rabbitmq.com/tutorials/amqp-concepts.html</a>
-[2] - <a href="http://supervisord.org/">http://supervisord.org/</a>
-[3] - <a href="https://github.com/alex-glv/bunnyacme/blob/master/src/Queue/Workers/SleepyWorker.php">https://github.com/alex-glv/bunnyacme/blob/master/src/Queue/Workers/SleepyWorker.php</a></p>
+<ul>
+<li>[1] - <a href="https://www.rabbitmq.com/tutorials/amqp-concepts.html">https://www.rabbitmq.com/tutorials/amqp-concepts.html</a></li>
+<li>[2] - <a href="http://supervisord.org/">http://supervisord.org/</a></li>
+<li>[3] - <a href="https://github.com/alex-glv/bunnyacme/blob/master/src/Queue/Workers/SleepyWorker.php">https://github.com/alex-glv/bunnyacme/blob/master/src/Queue/Workers/SleepyWorker.php</a></li>
+</ul>
 
                 <br>
                 <p><a href="http://www.itchyknowsdevs.me/blog/">Back to posts</a></p>

@@ -13,7 +13,7 @@
 <title>
 
 
-      
+     Blog 
 
 </title>
 <link rel="canonical" href="http://www.itchyknowsdevs.me/blog/">
@@ -101,69 +101,37 @@
     </div>
 </section>
 
-
-<section class="main post non-narrow zero-top-spacing">
+<section class="main">
     <div class="container">
         <div class="content">
-            <div class="front-matter">
-                <div class="title-container">
-                    <div class="page-heading">
-
-    
-
-</div>
-
-                    <div class="initials"><a href="http://www.itchyknowsdevs.me/">ag</a></div>
-                </div>
-                <div class="meta">
-                    <div class="date" title="Mon Jan 1 0001 00:00:00 UTC">Jan 1, 0001</div>
-                    <div class="reading-time"><div class="middot"></div>2 minutes read</div>
-                </div>
-            </div>
-            <div class="markdown">
+            <div class="page-heading">Blog</div>
+            <ul>
                 
+                <li class="post-item">
+    <div class="meta">Aug 6, 2016</div>
+    <a href="http://www.itchyknowsdevs.me/blog/refactoring-business-critical-php-application-with-rabbitmq/"><div>Refactoring business-critical PHP application with RabbitMQ</div></a>
+</li>
 
-<h1 id="testing-api-in-microservices-era">Testing API in microservices era</h1>
-
-<p>With the advent of microservices and distributed scalable systems REST API seems to be the most popular choice for enabling communication between the services that comprise the application.</p>
-
-<p>Surely, REST has proven to be valuable and relatively easy to implement because it relies on HTTP as a transport layer, its status codes and action verbs (GET, POST, DELETE) for indicating the status of operation calls.</p>
-
-<h1 id="challenges">Challenges</h1>
-
-<p>Implementing the API is one thing, how does one go about testing?</p>
-
-<p>With microservices, you are not bound to a single technology stack.
-Multiple teams working with their own technologies to implement APIs to communicate with other services, which means systematic tests have to be solved on the higher level.</p>
-
-<p>So, what&rsquo;s the de-facto standard for testing the APIs in the microservices era?</p>
-
-<h1 id="specification">Specification</h1>
-
-<p>To make sure that your services play nice with each other speccing out your APIs is a good start.</p>
-
-<p>You can start with manually describing what data structures the API consumes and produces.
-Having the specification has another benefit - it&rsquo;s trivial enough to generate client and server code for different languages.
-Specification also allows you to generate mocks for testing your services.</p>
-
-<h1 id="here-s-how-we-go-about-testing-our-microservices-step-1">Here&rsquo;s how we go about testing our microservices, step 1</h1>
-
-<p>Dredd allows you to test the API endpoint against the specification that you wrote before.
-Once integrated into the CI pipeline, it means that changes to the microservices won&rsquo;t break the client code  because it will always be validate against previously agreed specification.</p>
-
-<h1 id="step-2-mocks">Step 2: mocks</h1>
-
-<ul>
-<li>Something that allows you to mock out the api with some test data&hellip; ?</li>
-</ul>
-
-                <br>
-                <p><a href="http://www.itchyknowsdevs.me/blog/">Back to posts</a></p>
-            </div>
-            <br>
-            <div class="disqus">
                 
-            </div>
+                <li class="post-item">
+    <div class="meta">Mar 18, 2016</div>
+    <a href="http://www.itchyknowsdevs.me/blog/developing-golang-in-nixos/"><div>Developing Golang in NixOS</div></a>
+</li>
+
+                
+                <li class="post-item">
+    <div class="meta">Feb 26, 2016</div>
+    <a href="http://www.itchyknowsdevs.me/blog/hugo-on-amazon-aws-lambda-integrated-with-github/"><div>Hugo on Amazon AWS Lambda integrated with GitHub</div></a>
+</li>
+
+                
+                <li class="post-item">
+    <div class="meta">Feb 16, 2016</div>
+    <a href="http://www.itchyknowsdevs.me/blog/containers-are-not-real/"><div>Containers are not real</div></a>
+</li>
+
+                
+            </ul>
         </div>
     </div>
 </section>
@@ -171,7 +139,7 @@ Once integrated into the CI pipeline, it means that changes to the microservices
 
 
 
-
 </body>
 </html>
+
 
