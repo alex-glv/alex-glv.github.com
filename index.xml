@@ -60,24 +60,24 @@ This is the standart that RabbitMQ conforms to. There&amp;rsquo;s a great introd
 
 &lt;p&gt;You have to break down the service into multiple roles.
 Recurring billing service might be broken down in multiple stages like:
-- Find subscriptions due to be billed
-- Eliminate expired credit card records
-- Eliminate records that have cancelled their billing preferences and opted out
-- Schedule all the rest&lt;/p&gt;
+  - Find subscriptions due to be billed
+  - Eliminate expired credit card records
+  - Eliminate records that have cancelled their billing preferences and opted out
+  - Schedule all the rest&lt;/p&gt;
 
 &lt;p&gt;The last item will be our &amp;ldquo;messages&amp;rdquo;.
 We&amp;rsquo;ll send the user data over the queue system to the other side, where it will be picked up by our workers.&lt;/p&gt;
 
 &lt;p&gt;Workers will be the following:
-- Biller
-- Deactivator&lt;/p&gt;
+  - Biller
+  - Deactivator&lt;/p&gt;
 
 &lt;p&gt;Biller will try to perform the charge and Deactivator will manage the account suspension.&lt;/p&gt;
 
 &lt;p&gt;This approach solves a couple of issue:
-- Scalability: we are able to attach multiple workers for each role and easily scale our throughput
-- Separation of concerns: our small services will each reside in their own space and will be neatly separated
-- Refactoring space: it becomes easier to reason about the component potentially allows better deployment strategies. In addition, testing becames much simpler with having less mocks, because we&amp;rsquo;ll offsource a lot of work on our messaging platform. You can swap your queue driver implementation and implement dummy workers.&lt;/p&gt;
+  - Scalability: we are able to attach multiple workers for each role and easily scale our throughput
+  - Separation of concerns: our small services will each reside in their own space and will be neatly separated
+  - Refactoring space: it becomes easier to reason about the component potentially allows better deployment strategies. In addition, testing becames much simpler with having less mocks, because we&amp;rsquo;ll offsource a lot of work on our messaging platform. You can swap your queue driver implementation and implement dummy workers.&lt;/p&gt;
 
 &lt;h1 id=&#34;considerations&#34;&gt;Considerations&lt;/h1&gt;
 
