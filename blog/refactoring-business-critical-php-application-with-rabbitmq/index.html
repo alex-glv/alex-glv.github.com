@@ -165,25 +165,34 @@ This is the standart that RabbitMQ conforms to. There&rsquo;s a great introducti
 <h1 id="define-roles-workers-producers-and-messages">Define roles - workers, producers and messages</h1>
 
 <p>You have to break down the service into multiple roles.
-Recurring billing service might be broken down in multiple stages like:
-  - Find subscriptions due to be billed
-  - Eliminate expired credit card records
-  - Eliminate records that have cancelled their billing preferences and opted out
-  - Schedule all the rest</p>
+Recurring billing service might be broken down in multiple stages like:</p>
+
+<ul>
+<li>Find subscriptions due to be billed</li>
+<li>Eliminate expired credit card records</li>
+<li>Eliminate records that have cancelled their billing preferences and opted out</li>
+<li>Schedule all the rest</li>
+</ul>
 
 <p>The last item will be our &ldquo;messages&rdquo;.
 We&rsquo;ll send the user data over the queue system to the other side, where it will be picked up by our workers.</p>
 
-<p>Workers will be the following:
-  - Biller
-  - Deactivator</p>
+<p>Workers will be the following:</p>
+
+<ul>
+<li>Biller</li>
+<li>Deactivator</li>
+</ul>
 
 <p>Biller will try to perform the charge and Deactivator will manage the account suspension.</p>
 
-<p>This approach solves a couple of issue:
-  - Scalability: we are able to attach multiple workers for each role and easily scale our throughput
-  - Separation of concerns: our small services will each reside in their own space and will be neatly separated
-  - Refactoring space: it becomes easier to reason about the component potentially allows better deployment strategies. In addition, testing becames much simpler with having less mocks, because we&rsquo;ll offsource a lot of work on our messaging platform. You can swap your queue driver implementation and implement dummy workers.</p>
+<p>This approach solves a couple of issue:</p>
+
+<ul>
+<li>Scalability: we are able to attach multiple workers for each role and easily scale our throughput</li>
+<li>Separation of concerns: our small services will each reside in their own space and will be neatly separated</li>
+<li>Refactoring space: it becomes easier to reason about the component potentially allows better deployment strategies. In addition, testing becames much simpler with having less mocks, because we&rsquo;ll offsource a lot of work on our messaging platform. You can swap your queue driver implementation and implement dummy workers.</li>
+</ul>
 
 <h1 id="considerations">Considerations</h1>
 

@@ -59,25 +59,34 @@ This is the standart that RabbitMQ conforms to. There&amp;rsquo;s a great introd
 &lt;h1 id=&#34;define-roles-workers-producers-and-messages&#34;&gt;Define roles - workers, producers and messages&lt;/h1&gt;
 
 &lt;p&gt;You have to break down the service into multiple roles.
-Recurring billing service might be broken down in multiple stages like:
-  - Find subscriptions due to be billed
-  - Eliminate expired credit card records
-  - Eliminate records that have cancelled their billing preferences and opted out
-  - Schedule all the rest&lt;/p&gt;
+Recurring billing service might be broken down in multiple stages like:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Find subscriptions due to be billed&lt;/li&gt;
+&lt;li&gt;Eliminate expired credit card records&lt;/li&gt;
+&lt;li&gt;Eliminate records that have cancelled their billing preferences and opted out&lt;/li&gt;
+&lt;li&gt;Schedule all the rest&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;p&gt;The last item will be our &amp;ldquo;messages&amp;rdquo;.
 We&amp;rsquo;ll send the user data over the queue system to the other side, where it will be picked up by our workers.&lt;/p&gt;
 
-&lt;p&gt;Workers will be the following:
-  - Biller
-  - Deactivator&lt;/p&gt;
+&lt;p&gt;Workers will be the following:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Biller&lt;/li&gt;
+&lt;li&gt;Deactivator&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;p&gt;Biller will try to perform the charge and Deactivator will manage the account suspension.&lt;/p&gt;
 
-&lt;p&gt;This approach solves a couple of issue:
-  - Scalability: we are able to attach multiple workers for each role and easily scale our throughput
-  - Separation of concerns: our small services will each reside in their own space and will be neatly separated
-  - Refactoring space: it becomes easier to reason about the component potentially allows better deployment strategies. In addition, testing becames much simpler with having less mocks, because we&amp;rsquo;ll offsource a lot of work on our messaging platform. You can swap your queue driver implementation and implement dummy workers.&lt;/p&gt;
+&lt;p&gt;This approach solves a couple of issue:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Scalability: we are able to attach multiple workers for each role and easily scale our throughput&lt;/li&gt;
+&lt;li&gt;Separation of concerns: our small services will each reside in their own space and will be neatly separated&lt;/li&gt;
+&lt;li&gt;Refactoring space: it becomes easier to reason about the component potentially allows better deployment strategies. In addition, testing becames much simpler with having less mocks, because we&amp;rsquo;ll offsource a lot of work on our messaging platform. You can swap your queue driver implementation and implement dummy workers.&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;h1 id=&#34;considerations&#34;&gt;Considerations&lt;/h1&gt;
 
