@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Developer">
+
+<base href="http://www.itchyknowsdevs.me/">
+<title>
+
+
+     Om.next and what&#39;s next? 
+
+</title>
+<link rel="canonical" href="http://www.itchyknowsdevs.me/blog/om.next-and-whats-next/">
+
+
+<script type="text/javascript">
+    var baseURL = 'http:\/\/www.itchyknowsdevs.me\/';
+    var host = baseURL.substring(0, baseURL.length - 1).replace(/\//g, '');
+    if ((host === window.location.host) && (window.location.protocol !== 'https:')) {
+        window.location.protocol = 'https:';
+    }
+</script>
+
+
+
+
+
+<link rel="stylesheet" href="http://www.itchyknowsdevs.me/css/reset.css">
+<link rel="stylesheet" href="http://www.itchyknowsdevs.me/css/pygments.css">
+<link rel="stylesheet" href="http://www.itchyknowsdevs.me/css/main.css">
+
+
+    <link rel="stylesheet" href="http://www.itchyknowsdevs.me/css/override.css">
+
+
+
+
+
+<link rel="shortcut icon"
+
+    href="http://www.itchyknowsdevs.me/img/leaf.ico"
+
+>
+
+
+
+</head>
+
+
+<body lang="en">
+
+<section class="header"> 
+    <div class="container">
+        <div class="content">
+            <a href="http://www.itchyknowsdevs.me/"><div class="name">Aleksandr Guljajev</div></a>
+            <nav>
+                <ul>
+                    <a href="http://www.itchyknowsdevs.me/blog/"><li>Blog</li></a>
+                    <a href="http://www.itchyknowsdevs.me/about/"><li>About</li></a>
+                    <a href="http://www.itchyknowsdevs.me/code/"><li>Code</li></a>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</section>
+
+<section class="icons">
+    <div class="container">
+        <div class="content">
+
+        
+            <a href="//github.com/alex-glv" target="_blank">
+                <i class="icon ion-social-github"></i>
+            </a>
+        
+        
+        
+            <a href="//twitter.com/jaleks_" target="_blank">
+                <i class="icon ion-social-twitter"></i>
+            </a>
+        
+
+        
+            <a href="//linkedin.com/in/aleksadr-guljajev-a17941a6" target="_blank">
+                <i class="icon ion-social-linkedin"></i>
+            </a>
+        
+
+        
+
+        
+
+        
+        </div>
+    </div>
+</section>
+
+
+<section class="main post non-narrow zero-top-spacing">
+    <div class="container">
+        <div class="content">
+            <div class="front-matter">
+                <div class="title-container">
+                    <div class="page-heading">
+
+    Om.next and what&#39;s next?
+
+</div>
+
+                    <div class="initials"><a href="http://www.itchyknowsdevs.me/">ag</a></div>
+                </div>
+                <div class="meta">
+                    <div class="date" title="Fri May 19 2017 00:00:00 UTC">May 19, 2017</div>
+                    <div class="reading-time"><div class="middot"></div>7 minutes read</div>
+                </div>
+            </div>
+            <div class="markdown">
+                
+
+<p>I enjoy writing Clojure, a lot. I&rsquo;ve written Javascript, PHP, Python, C, and Go. Clojure is by far the most satisfying language to write code and reason in. I keep coming back to it.
+Whether it&rsquo;s the kind of people it attracts, alien ideas it encourages implementing things in, or simply personal biased preference, I don&rsquo;t know.</p>
+
+<p>That also extends to Clojurescript. Clojurescript and Clojure have been my first combo in writing front and back-end apps.</p>
+
+<p>I wanted a small front-end project to sharpen my skills in full-stack Single Page Applications development and researched my options. This was in November 2016.</p>
+
+<p>First presentations about om.next had been about a year old, yet om.next was still in alpha and was promised to get in Beta &ldquo;really soon&rdquo;.</p>
+
+<p>The concept of declarative queries for front-end components made a lot of sense and seemed like a breathe of fresh air to the alternatives in the field.</p>
+
+<p>I didn&rsquo;t expect smooth sailing and totally anticipated a lot of unknows and approached the learning with an open mind.</p>
+
+<h1 id="om-current-om-next">om.current? om.next?</h1>
+
+<p>First off the bat, it seemed very confusing that the &ldquo;mature&rdquo; version of Om was in the same repo. Even though om.next was not recommended for use in production, om.current was de-facto &ldquo;dead&rdquo;. The reason is the fact that they&rsquo;re totally incompatible. This is very similar to Angular 1 and Angular 2 scenario.</p>
+
+<p>The Wiki was pretty good to start with.
+Om.next has a only few, albeit really powerful concepts.</p>
+
+<h2 id="reconciler">Reconciler</h2>
+
+<p>Reconciler is like a messaging hub that receives queries or mutation requests and decides when to fetch the data from the local store or make a remote query to fetch it, and orchestates rendering. It also decides how to merge data into the local tree and when to force component updates.</p>
+
+<h2 id="parser">Parser</h2>
+
+<p>Parser functions are essentially query &ldquo;decomposers&rdquo; where you define how to fetch data for your components.</p>
+
+<p>I found parser to be a beautiful decomplecting primitive.
+You define a multimethod and receive a key from reconciler that it would like to fetch, and you decide how to obtain that key from the store.</p>
+
+<p>The simplest case is to fetch the key value from the state map.
+I was exhilirated about it&rsquo;s flexibility and application possibilities.</p>
+
+<h2 id="query">Query</h2>
+
+<p>Query is similar to GraphQL queries where you request the data in whichever shape you prefer, om parses your query and request your parser methods for each key in that query.</p>
+
+<p>Queries can be joins, unions and simple keys. Joins are not dissimilar to SQL joins where you link entities together and fetch associated data.</p>
+
+<h2 id="normalization">Normalization</h2>
+
+<p>Another powerful concept in om.next is data normalization.
+The driving motivator for normalization is the nature of a front-end application. It can show the same data (or an entity) in different contexts (a list of entities and a widget with &ldquo;top 5 <em>something</em> things&rdquo;).
+In order to not have to update all those things at once when needed, your data is normalized and you only have to update it in one location, and the rest are simply links to it.</p>
+
+<p>Think a live score board of 5 teams. The main area of an app displays the teams and detailed information about each. Also, it holds current playing teams and their score. Once the score updates, you can merge the new score for the entity and whichever other app components show entity related information, simply hold links to the central location, always staying up to date.</p>
+
+<p>You could access or mutate component&rsquo;s bit of data by simply accessing it with <code>get-in</code>:</p>
+
+<pre><code>(get-in store [:items :by-id 123])
+</code></pre>
+
+<p>If you mutate that same item, all components that use it in the query will be scheduled for re-render.</p>
+
+<h1 id="server-side-and-datomic-s-pull-query">Server side and Datomic&rsquo;s pull query</h1>
+
+<p>Om.next&rsquo;s story does not end in the browser, though.
+For better or worse, om has a back-end component that also comes with a parser.</p>
+
+<p>Every time your front-end hits the &ldquo;remote&rdquo; part (presumably your back-end server) om&rsquo;s handler gets the requests, parses the query and hits the server side parses that will get the data, or perform a mutation.</p>
+
+<p>Hopefully, I am not making too big of an assumption, but you have to buy in to om&rsquo;s backend to be able to use om on the front.</p>
+
+<p>Om integrates <em>really well</em> with Datomic.</p>
+
+<p>So well, in fact, that you can pass Om.next queries right into Datomic transactions and return data to the front-end without any processing. And that, I belive was the choice behind the query language as it is.</p>
+
+<p>This was probably the best integration experience so far.
+If you are 100% Clojure and Clojurescript shop, this is the best thing you can get.</p>
+
+<p>Om.next for front-end, Transit for transport, Om.next and Datomic on the back-end. It finally feels like a complete journey, &ldquo;There and back again&rdquo; quite in a literal sense, send query there and get it back again in the shape you exactly requested.</p>
+
+<h1 id="writing-parsers">Writing parsers&hellip;</h1>
+
+<p>This proved the most difficult part.
+If you go a tiny bit outside of the tutorial scenario, you are hit with all the complexity of parsing trees.
+It&rsquo;s very easy to trip over your whole app by making the tiniest of mistakes. Everytime I have to make changes to the parser, I think &ldquo;Oh boy, here we go&hellip;&rdquo;</p>
+
+<p>Something like implementing routing took me a lot of time to figure out how to do. I don&rsquo;t think it should be as difficult as it is now. However, Antony&rsquo;s blog really helped to understand valid approach and stick to one of them.</p>
+
+<p>Since there&rsquo;s a concept of &ldquo;root&rdquo; query, that is you tell om.next at which part of the query to stop descending and simply send request to the remote.</p>
+
+<p>It sucks if part of your root query contains a part that is not meant to go remotely, you&rsquo;ll have to rip it apart and put it back together. And while it doesn&rsquo;t seem very difficult in theory, it becomes hairy very fast.</p>
+
+<p>Unfortunately there&rsquo;s no good reference app that implements routing.</p>
+
+<p>My first to go were to-do list implemetation by David Nolan [1] and Antony Monteiro [2].</p>
+
+<p>Second was CicleCI&rsquo;s front-end repo, which is both open-source and uses om.next.</p>
+
+<p>Third reference was Untangled [3] framework which has some amazing deep dive into the om.next concepts.</p>
+
+<p>Om.next had some really steep learning curve for me.
+You&rsquo;ll have to analyze the way parsing works and juggle the concepts in your head to make sure you succesfully orchestrate your remote, components queries, parsers
+and denormalization.</p>
+
+<h1 id="reasons-why-it-doesn-t-work-for-me">Reasons why it doesn&rsquo;t work for me</h1>
+
+<p>While it&rsquo;s been an amazing experience learning om.next I don&rsquo;t think I will be using it for my projects any time soon.</p>
+
+<p>Om.next has been in Alpha for more than a year and was meant to be in beta around half a year ago.</p>
+
+<p>It was really demotivating to not see any milestones, and seeing pull requests sitting and collecting dust without any comments, accepts or rejections [4].</p>
+
+<p>One of the reasons in my opinion is both stewards of the project Antony and David are busy working on Clojurescript compiler, so it doesn&rsquo;t seem that there&rsquo;s much traction on om.next.</p>
+
+<p>Another big blow for me is that I can&rsquo;t write om.next app without having it on the server. I&rsquo;d really love more &ldquo;unified&rdquo; commuication approach with my back-end, like GraphQL, where I can have polyglot clients all being able to communicate with my back-end.</p>
+
+<p>It&rsquo;s actually very hard to go and do something for months and then say to yourself, that it&rsquo;s not working out for you and it&rsquo;s better to move on to something, yet it&rsquo;s quite liberating.</p>
+
+<p>I think it makes zero sense to use tool as powerful as om.next for small to medium size apps, it&rsquo;s yet to be seen how it works out for apps at scale. It seems to be working really well for CicleCI [4].</p>
+
+<h1 id="final-thoughts">Final thoughts</h1>
+
+<p>I am opening my om.next efforts for the public: &ldquo;boards-io&rdquo; [5].</p>
+
+<p>I won&rsquo;t say what it&rsquo;s similar to.
+Let&rsquo;s say it&rsquo;s a clone of a product that rhymes with &ldquo;Hé-llo&rdquo;.</p>
+
+<p>Boards-io has Google OAuth integration, it has boards, columns and tasks to play around with.</p>
+
+<p>You can use it as a reference for how to integrate routing, back-end and database storage for your data.</p>
+
+<p>The end.</p>
+
+<p>[1] <a href="https://github.com/anmonteiro/om-next-fullstack">https://github.com/anmonteiro/om-next-fullstack</a>
+[2] <a href="https://github.com/swannodette/om-next-demo">https://github.com/swannodette/om-next-demo</a>
+[3] <a href="http://untangled-web.github.io">http://untangled-web.github.io</a>
+[4] <a href="https://github.com/circleci/frontend">https://github.com/circleci/frontend</a>
+[5] <a href="https://github.com/alex-glv/boards-io">https://github.com/alex-glv/boards-io</a></p>
+
+                <br>
+                <p><a href="http://www.itchyknowsdevs.me/blog/">Back to posts</a></p>
+            </div>
+            <br>
+            <div class="disqus">
+                
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+</body>
+</html>
+

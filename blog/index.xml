@@ -6,8 +6,20 @@
     <description>Recent content in Blog on Aleksandr Guljajev</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
-    <lastBuildDate>Sat, 06 Aug 2016 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://www.itchyknowsdevs.me/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 19 May 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://www.itchyknowsdevs.me/blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Om.next and what&#39;s next?</title>
+      <link>http://www.itchyknowsdevs.me/blog/om.next-and-whats-next/</link>
+      <pubDate>Fri, 19 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.itchyknowsdevs.me/blog/om.next-and-whats-next/</guid>
+      <description>I enjoy writing Clojure, a lot. I&amp;rsquo;ve written Javascript, PHP, Python, C, and Go. Clojure is by far the most satisfying language to write code and reason in. I keep coming back to it. Whether it&amp;rsquo;s the kind of people it attracts, alien ideas it encourages implementing things in, or simply personal biased preference, I don&amp;rsquo;t know.
+That also extends to Clojurescript. Clojurescript and Clojure have been my first combo in writing front and back-end apps.</description>
+    </item>
     
     <item>
       <title>Refactoring business-critical PHP application with RabbitMQ</title>
@@ -15,130 +27,10 @@
       <pubDate>Sat, 06 Aug 2016 00:00:00 +0000</pubDate>
       
       <guid>http://www.itchyknowsdevs.me/blog/refactoring-business-critical-php-application-with-rabbitmq/</guid>
-      <description>
-
-&lt;p&gt;NB: Code accompanying the post is on &lt;a href=&#34;https://github.com/alex-glv/bunny-acme&#34;&gt;github.com/alex-glv/bunny-acme&lt;/a&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;the-problem&#34;&gt;The Problem&lt;/h1&gt;
-
-&lt;p&gt;While doing contract work optimizing and improving stability of an old PHP-based billing application I was constantly facing issues with long running processes that failed and couldn&amp;rsquo;t easily restore their state.&lt;/p&gt;
-
-&lt;p&gt;The actual process was performing daily billing services based on subscription rules.&lt;/p&gt;
-
-&lt;p&gt;The process would start, extract a whole bunch of information at once and start processing it one by one, withou keeping an intermediate progress results.&lt;/p&gt;
-
-&lt;p&gt;It would take input and produce side effects, churning along as it goes through.&lt;/p&gt;
-
-&lt;p&gt;Imagine a manufacturing process in a good factory, created with the good practices in mind. A conveyer belt and items at various stages being combined with other items through molding and fusing and cooling and whatnot.&lt;/p&gt;
-
-&lt;p&gt;On the other hand, in a factory where good practices and standards are not followed, someone puts all the required ingredients at once through a narrow window. They&amp;rsquo;re being ingested and rumbling and grumbling starts. In 3 hours your side-effect (a manufactured item) is spat out.&lt;/p&gt;
-
-&lt;p&gt;This is fine until something breaks.
-When it does, you want to know exactly where it happened by looking at the intermediate state.&lt;/p&gt;
-
-&lt;h1 id=&#34;solution-queues-to-the-rescue&#34;&gt;Solution: queues to the rescue&lt;/h1&gt;
-
-&lt;p&gt;I decided to break down the process by introducing queues. Simply because I wanted to learn about queues and thought it would be a great way to break the complexity of the system.&lt;/p&gt;
-
-&lt;p&gt;Rich Hickey, the creator of Clojure in his famous talk &amp;ldquo;Simple Made Easy&amp;rdquo; said:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;If you are not using queues extensively, you should start right away
-- Rich Hickey&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;I was vaguely familiar with RabbitMQ and after reading some documentation decided it was a good fit.&lt;/p&gt;
-
-&lt;h1 id=&#34;amqp-the-messaging-protocol&#34;&gt;AMQP - the messaging protocol&lt;/h1&gt;
-
-&lt;p&gt;AMQP is a flexible messaging protocol. It defines basic roles and entities involved in the message lifecycle.
-This is the standart that RabbitMQ conforms to. There&amp;rsquo;s a great introduction article on RabbitMQ[1] website that will help you with the basics. It&amp;rsquo;s a prerequisite to using RabbitMQ.&lt;/p&gt;
-
-&lt;p&gt;You don&amp;rsquo;t want to lose all your messages in the queue if all of your subscribers go down, so you have to specify appropriate options.&lt;/p&gt;
-
-&lt;h1 id=&#34;define-roles-workers-producers-and-messages&#34;&gt;Define roles - workers, producers and messages&lt;/h1&gt;
-
-&lt;p&gt;You have to break down the service into multiple roles.
-Recurring billing service might be broken down in multiple stages like:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Find subscriptions due to be billed&lt;/li&gt;
-&lt;li&gt;Eliminate expired credit card records&lt;/li&gt;
-&lt;li&gt;Eliminate records that have cancelled their billing preferences and opted out&lt;/li&gt;
-&lt;li&gt;Schedule all the rest&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;The last item will be our &amp;ldquo;messages&amp;rdquo;.
-We&amp;rsquo;ll send the user data over the queue system to the other side, where it will be picked up by our workers.&lt;/p&gt;
-
-&lt;p&gt;Workers will be the following:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Biller&lt;/li&gt;
-&lt;li&gt;Deactivator&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Biller will try to perform the charge and Deactivator will manage the account suspension.&lt;/p&gt;
-
-&lt;p&gt;This approach solves a couple of issue:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Scalability: we are able to attach multiple workers for each role and easily scale our throughput&lt;/li&gt;
-&lt;li&gt;Separation of concerns: our small services will each reside in their own space and will be neatly separated&lt;/li&gt;
-&lt;li&gt;Refactoring space: it becomes easier to reason about the component potentially allows better deployment strategies. In addition, testing becames much simpler with having less mocks, because we&amp;rsquo;ll offsource a lot of work on our messaging platform. You can swap your queue driver implementation and implement dummy workers.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&#34;considerations&#34;&gt;Considerations&lt;/h1&gt;
-
-&lt;p&gt;Having workers sitting and waiting for work to do means that the process will be long lived with all the implications.
-You have to support the lifecycle, make sure the processes are started if they go down and try to eliminate all possible memory leaks.&lt;/p&gt;
-
-&lt;p&gt;I have been using supervisord[2] to manage the processes.&lt;/p&gt;
-
-&lt;h1 id=&#34;queue-listeners&#34;&gt;Queue listeners&lt;/h1&gt;
-
-&lt;p&gt;Here&amp;rsquo;s an example of a long lived queue listener:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;?php
-    [...]
-    protected function listen($queueName) {
-        /** @var \BunnyAcme\Queue\Driver\Driver $driver */
-        $workers = $this-&amp;gt;queueManager-&amp;gt;getWorkers($queueName);
-        $driver = $this-&amp;gt;queueManager-&amp;gt;getDriver(); // this will be AMQP driver
-
-        $driver-&amp;gt;listen($queueName, $workers); // listen will block
-    }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Here, getWorkers() method will return all the instances and of workers responding to our queue name.
-The underlying structure is an associative array where the index is the queue name and the value is the implementation class that conforms to the Worker interface.
-Simple worker interface:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;?php
-
-namespace BunnyAcme\Queue\Workers;
-
-interface Worker {
-    public function __construct($container);
-    public function handleJob($payload);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
-
-&lt;p&gt;Using queues in general and RabbitMQ specifically maintaining large components became much easier.
-Also, implementing new services is quite simple, just implement a worker and a producer and let the RabbitMQ manage the rest.&lt;/p&gt;
-
-&lt;h1 id=&#34;resources&#34;&gt;Resources&lt;/h1&gt;
-
-&lt;p&gt;To ease the transition to using queues I have written a simple queue wrapper library that shows basic abstractions and a demo worker implementation [3]&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;[1] - &lt;a href=&#34;https://www.rabbitmq.com/tutorials/amqp-concepts.html&#34;&gt;https://www.rabbitmq.com/tutorials/amqp-concepts.html&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;[2] - &lt;a href=&#34;http://supervisord.org/&#34;&gt;http://supervisord.org/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;[3] - &lt;a href=&#34;https://github.com/alex-glv/bunnyacme/blob/master/src/Queue/Workers/SleepyWorker.php&#34;&gt;https://github.com/alex-glv/bunnyacme/blob/master/src/Queue/Workers/SleepyWorker.php&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</description>
+      <description>NB: Code accompanying the post is on github.com/alex-glv/bunny-acme
+The Problem While doing contract work optimizing and improving stability of an old PHP-based billing application I was constantly facing issues with long running processes that failed and couldn&amp;rsquo;t easily restore their state.
+The actual process was performing daily billing services based on subscription rules.
+The process would start, extract a whole bunch of information at once and start processing it one by one, withou keeping an intermediate progress results.</description>
     </item>
     
     <item>
@@ -147,70 +39,8 @@ Also, implementing new services is quite simple, just implement a worker and a p
       <pubDate>Fri, 18 Mar 2016 00:00:00 +0000</pubDate>
       
       <guid>http://www.itchyknowsdevs.me/blog/developing-golang-in-nixos/</guid>
-      <description>
-
-&lt;h1 id=&#34;why-nixos&#34;&gt;Why NixOS?&lt;/h1&gt;
-
-&lt;p&gt;The idea of fully reproducible system fascinates me a lot.
-Part of Getting Things Done philosophy is not to contaminate your head with the little things you have to do, you put them down on a list.&lt;/p&gt;
-
-&lt;p&gt;That&amp;rsquo;s why we use password managers, because you don&amp;rsquo;t want to keep all those password from a bazillion websites in your head - you trust something else to keep them.
-With you development environment it&amp;rsquo;s the same - you build your custom machine and when your drive goes bust, you go: &amp;ldquo;Oh, shit.. When&amp;rsquo;s my latest backup, again?&amp;rdquo;&lt;/p&gt;
-
-&lt;p&gt;That&amp;rsquo;s why you check in your OS configuration.
-NixOS eliminates this issue 99% so you have even less to worry about.&lt;/p&gt;
-
-&lt;p&gt;Take a look, &lt;a href=&#34;https://github.com/alex-glv/nixos-conf&#34;&gt;this is my OS&lt;/a&gt; - all the software I use, my user user account, services - everything.
-The only thing that I need to do to fully replicate my system on a machine is pull the config, and run &lt;code&gt;nixos-install&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;This is great and all, but where&amp;rsquo;s the catch?&lt;/p&gt;
-
-&lt;h1 id=&#34;the-catch&#34;&gt;The Catch&lt;/h1&gt;
-
-&lt;p&gt;NixOS comes with the Nix package manager and their its flavored language to describe those packages.
-You most likely have never heard of Nix, it&amp;rsquo;s not arch or OSX with Homebrew and all the packages imaginable.
-So, you&amp;rsquo;ll have to write some packages yourself.&lt;/p&gt;
-
-&lt;h1 id=&#34;golang-dependencies&#34;&gt;Golang - dependencies&lt;/h1&gt;
-
-&lt;p&gt;Nix package manager is also capable of handling go dependencies, which is great, because it&amp;rsquo;s a decent replacement for &lt;code&gt;go get&lt;/code&gt;. [1]
-However, if you want to quickly hack on a CLI tool, it gets a bit hairy: try to figure if the packages are present in the repository, if not then you have to write them yourself.
-It&amp;rsquo;s a bit too slow and I am not very experienced with that yet.
-So, I prefer to use godep instead. Luckily it&amp;rsquo;s easy to obtain with the usual &lt;code&gt;nix-env -i godep&lt;/code&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;goroot-and-gopath&#34;&gt;GOROOT and GOPATH&lt;/h1&gt;
-
-&lt;p&gt;I store my sources in a home directory, which means I also need to have $GOROOT exported to allow go tools like gofmt and gorcode to locate the standard library sources.
-Luckily, adding extra variables to your environment is very easy in nix:&lt;/p&gt;
-
-&lt;p&gt;Add go to your systemPackages list under your configuration.nix [2] file:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;environment.systemPackages = with pkgs; [
-  go
-  // other pkgs
-];
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Then, add the extra environment variable:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;environment.variables = { GOROOT = [ &amp;quot;${pkgs.go.out}/share/go&amp;quot; ]; };
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This ensures your GOROOT will always point to standard library sources directory.
-Adding GOPATH is very similar, however I tend to store it in my bashrc somewher under dotfiles.&lt;/p&gt;
-
-&lt;h1 id=&#34;balance&#34;&gt;Balance&lt;/h1&gt;
-
-&lt;p&gt;I found a good compromise between reproducible system and convenience to use it.
-You can have godep and gocode fully working with the necessary environment variables set, and also have these settings stored under nix configuration file.&lt;/p&gt;
-
-&lt;h1 id=&#34;footnotes&#34;&gt;Footnotes&lt;/h1&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://lethalman.blogspot.nl/2015/02/developing-in-golang-with-nix-package.html&#34;&gt;Developing in golang with nix package&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://nixos.org/nixos/manual/index.html#sec-changing-config&#34;&gt;NixOS manual: changing configuration&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</description>
+      <description>Why NixOS? The idea of fully reproducible system fascinates me a lot. Part of Getting Things Done philosophy is not to contaminate your head with the little things you have to do, you put them down on a list.
+That&amp;rsquo;s why we use password managers, because you don&amp;rsquo;t want to keep all those password from a bazillion websites in your head - you trust something else to keep them. With you development environment it&amp;rsquo;s the same - you build your custom machine and when your drive goes bust, you go: &amp;ldquo;Oh, shit.</description>
     </item>
     
     <item>
@@ -219,98 +49,9 @@ You can have godep and gocode fully working with the necessary environment varia
       <pubDate>Fri, 26 Feb 2016 00:00:00 +0000</pubDate>
       
       <guid>http://www.itchyknowsdevs.me/blog/hugo-on-amazon-aws-lambda-integrated-with-github/</guid>
-      <description>
-
-&lt;h1 id=&#34;the-problem&#34;&gt;The Problem&lt;/h1&gt;
-
-&lt;p&gt;I love static website generators. I think it&amp;rsquo;s a great iteration over the old approach before dynamic websites became a de-facto standard.&lt;/p&gt;
-
-&lt;p&gt;The most compelling argument towards using static websites is &amp;ldquo;minimum-hosting&amp;rdquo; approach.
-The only thing you need is a web server and a domain name.&lt;/p&gt;
-
-&lt;p&gt;You still have the problem of continuos delivery. If you are anything like me, you don&amp;rsquo;t want to keep rebuilding and deploying your website manually.&lt;/p&gt;
-
-&lt;p&gt;Make changes, test locally, push, make a sandwich and reflect on eternity of consciousness in the Universe. The changes are live. Ah, beautiful.&lt;/p&gt;
-
-&lt;h1 id=&#34;inspiration&#34;&gt;Inspiration&lt;/h1&gt;
-
-&lt;p&gt;My approach was inspired by &lt;a href=&#34;bezdelev.com/post/hugo-aws-lambda-static-website/&#34;&gt;this blogpost&lt;/a&gt;.
-I though, huh, this is cool. Then I set it up and quickly realised its shortcoming: manual S3 website upload.&lt;/p&gt;
-
-&lt;p&gt;I decided to take it a step further and integrate the process with GitHub.&lt;/p&gt;
-
-&lt;h1 id=&#34;prerequisites-process&#34;&gt;Prerequisites &amp;amp; process&lt;/h1&gt;
-
-&lt;p&gt;Some familiarity with AWS is required.&lt;/p&gt;
-
-&lt;p&gt;You have configured all the required components on AWS to publish your website:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;S3 bucket with the source files&lt;/li&gt;
-&lt;li&gt;Route 53 for DNS&lt;/li&gt;
-&lt;li&gt;CloudFront for SSL and load balancing.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;This guide will only address publishing your static content through Hugo compiler from GitHub to S3 bucket.&lt;/p&gt;
-
-&lt;p&gt;My AWS configuration is very similar described in the post above.&lt;/p&gt;
-
-&lt;p&gt;There are some changes, however:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;I don&amp;rsquo;t have the input.&lt;website&gt; bucket, the changes are pulled off GitHub&lt;/li&gt;
-&lt;li&gt;I have configured AWS SNS with GitHub WebHooks. Each commit is trigering SNS which in turn is configured as AWS Lambda event source.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&#34;introducing-github-hugo-lambda-integration-project&#34;&gt;Introducing GitHub-Hugo-Lambda integration project&lt;/h1&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://github.com/alex-glv/github-hugo-lambda&#34;&gt;Github Hugo Lambda&lt;/a&gt; project should do most of the configuration for you.
-It will initialise Node dependencies, create Lambda code package and upload it on Amazon AWS Lambda.
-There don&amp;rsquo;t seem to be a way to create Event source mapping from SNS to Lambda through AWS Cli so you have to do it manually.
-You have to create GitHub.com webhook service set-up to fire Amazon SNS event.&lt;/p&gt;
-
-&lt;p&gt;Start by checking out the project:&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;git clone https://github.com/alex-glv/github-hugo-lambda&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;Create config files from provided samples:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;cp {sample,}.config.mk
-cp {sample,}.config.json
-cp {sample,}.rolepolicyS3.json
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Edit the config files, this should be straightforward&lt;/p&gt;
-
-&lt;p&gt;Then, run:&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;make createsns&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;This will create an SNS topic.
-Now, navigate to GitHub.com project Settings -&amp;gt; Webhooks &amp;amp; services -&amp;gt; Add Service -&amp;gt; Amazon SNS.
-Fill in the required values and submit. This should be it for configuring GitHub.
-We need to create Roles and Policies to allow Lambda access to our S3 bucket.&lt;/p&gt;
-
-&lt;p&gt;Run &lt;code&gt;make createrole&lt;/code&gt; to create the role and necessary policies.&lt;/p&gt;
-
-&lt;p&gt;Now run:&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;make initnodedeps &amp;amp;&amp;amp; make build &amp;amp;&amp;amp; make deploy&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;This will pull NodeJS dependencies, zip the files and push it to Amazon Lambda.
-After this has been completed, go to Lambda configuration page, add Event source and choose the SNS entry you created earlier.&lt;/p&gt;
-
-&lt;p&gt;At this point, everything should be set.&lt;/p&gt;
-
-&lt;p&gt;NOTE: p7zip is a must for creating the archive. It seems that de-facto zip archiver on Unix does not retain executable flags that are required to run hugo, because it&amp;rsquo;s a compiled executable.&lt;/p&gt;
-
-&lt;p&gt;You can rune the test by clicking &amp;ldquo;Test service&amp;rdquo; from the Github webhooks page and it will send the test payload.&lt;/p&gt;
-
-&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
-
-&lt;p&gt;Hopefully this post and project help you to streamline creation of simple static websites.
-Configured once, deployment will be fully automated and you can concentrate on creating value rather than worrying how to publish your website changes.&lt;/p&gt;
-</description>
+      <description>The Problem I love static website generators. I think it&amp;rsquo;s a great iteration over the old approach before dynamic websites became a de-facto standard.
+The most compelling argument towards using static websites is &amp;ldquo;minimum-hosting&amp;rdquo; approach. The only thing you need is a web server and a domain name.
+You still have the problem of continuos delivery. If you are anything like me, you don&amp;rsquo;t want to keep rebuilding and deploying your website manually.</description>
     </item>
     
     <item>
@@ -319,159 +60,7 @@ Configured once, deployment will be fully automated and you can concentrate on c
       <pubDate>Tue, 16 Feb 2016 00:00:00 +0000</pubDate>
       
       <guid>http://www.itchyknowsdevs.me/blog/containers-are-not-real/</guid>
-      <description>
-
-&lt;h1 id=&#34;the-advent-of-containers&#34;&gt;The advent of containers&lt;/h1&gt;
-
-&lt;p&gt;Containers seem to have turned the industry upside down and marching full ahead to become the dominant way of shipping software.
-To uninitiated mortals, Docker seems to be kind of a strange child.
-Where does it come from, what&amp;rsquo;s it good at?
-It looks like VM, but everyone keeps telling us not to compare it to VMs.
-Even though it gained a massive traction, it still has a long way to go to be a de-facto standard every developer should be familiar with.&lt;/p&gt;
-
-&lt;p&gt;In this post I&amp;rsquo;ll go through the elements that make up the software container, what underlying infrastructure allows it to exist and how to make a DIY container on a clean ubuntu machine.&lt;/p&gt;
-
-&lt;p&gt;We will be creating our own busybox container!&lt;/p&gt;
-
-&lt;h1 id=&#34;namespaces&#34;&gt;Namespaces&lt;/h1&gt;
-
-&lt;p&gt;To create illusion of a container, Docker (and alike) utilizes Linux kernel feature - namespaces.&lt;/p&gt;
-
-&lt;p&gt;As the name suggests, namespaces allow isolation of global resources, similar to programming language namespaces that allow the namespace functionality to stay encapsulated from the rest of the codebase.
-It appears as if a  process or a group of processes are in control of these resources.&lt;/p&gt;
-
-&lt;p&gt;There are 6 different namespaces that allow isolation of different types of system resources:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;UTS&lt;/li&gt;
-&lt;li&gt;Mount&lt;/li&gt;
-&lt;li&gt;User&lt;/li&gt;
-&lt;li&gt;Network&lt;/li&gt;
-&lt;li&gt;Proc&lt;/li&gt;
-&lt;li&gt;IPC&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;I will not go too deeply in the discusssion of namespaces, you can read more about them in a brilliant series of articles by Michael Kerrisk on linux kernel namespaces. &lt;a href=&#34;https://lwn.net/Articles/531114/&#34;&gt;https://lwn.net/Articles/531114/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;So, by utilizing resource isolation processes create an illusion of a standalone container.
-Interesting thing that if you search for words &amp;ldquo;containers&amp;rdquo; in linux kernel, you will find nothing related to actual concept of containerization.
-This is it, the containers don&amp;rsquo;t actually exist, they are not real, we make them real.
-Since the genie is out of the bottle now, let&amp;rsquo;s recreate a busybox container from scratch.&lt;/p&gt;
-
-&lt;h1 id=&#34;prerequisites&#34;&gt;Prerequisites&lt;/h1&gt;
-
-&lt;p&gt;I am using DigitalOcean with a clean Ubuntu 15.10 virtual machine, and nothing more, so you can easily reproduce the results.&lt;/p&gt;
-
-&lt;h1 id=&#34;network-interfaces&#34;&gt;Network interfaces&lt;/h1&gt;
-
-&lt;p&gt;Containers wouldn&amp;rsquo;t be very interesting if they didn&amp;rsquo;t have access to the internet.
-It&amp;rsquo;s like lego bricks without the studs (&amp;ldquo;stud&amp;rdquo; seems to be an official term to call those little pimples on Lego bricks &lt;a href=&#34;http://thebrickblogger.com/2010/11/lego-disctionary-basic-term/&#34;&gt;http://thebrickblogger.com/2010/11/lego-disctionary-basic-term/&lt;/a&gt;).&lt;/p&gt;
-
-&lt;p&gt;Luckily, linux kernel provides an option of network namespaces that allow a process to have its own isolated network stack. We connect that stack with the host network namespace with virtual ethernet devices.&lt;/p&gt;
-
-&lt;p&gt;First, let&amp;rsquo;s create our network namespace:
-&lt;code&gt;ip netns add container&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;Ensure that kernel allows packet forwarding:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;echo 1 &amp;gt; /proc/sys/net/ipv4/ip_forward
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Now, we&amp;rsquo;ll create a pair of virtual ethernet devices. Think of them as a pipe where interfaces are on both ends.
-I like to think of them as portals to the alternate universe.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;ip link add veth0 type veth peer name veth1
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We created a pair of interfaces veth0 and veth1.
-We&amp;rsquo;ll add a tap device that will bridge our virtual device with the real (or not) hardware adapter:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;ip tuntap add tapm mode tap 
-ip link set dev tapm up
-ip link add brm type bridge
-ip link set dev tapm master brm
-ip link set dev veth0 master brm
-
-ip addr add 10.0.0.1/24 dev brm
-ip link set dev veth0 up
-ip link set dev brm up
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;And iptables rules to allow traffic forward:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;
-iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE 
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Now, we&amp;rsquo;ll move one of them into a separate network namespace which we created before:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;ip link set veth1 netns container 
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Let&amp;rsquo;s add the IP address and bring them up:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;ip netns exec container ip addr add dev veth1 10.0.0.2/24
-ip netns exec container ip link set dev veth1 up
-ip netns exec container ip route add  default via 10.0.0.1
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Let&amp;rsquo;s try out if our container network interface has access to the internet:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;ip netns exec container ping -c1 8.8.8.8
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;If our set-up went well, you should get a successful ping response.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://blog.scottlowe.org/2013/09/04/introducing-linux-network-namespaces/&#34;&gt;http://blog.scottlowe.org/2013/09/04/introducing-linux-network-namespaces/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;OK, we&amp;rsquo;ve managed the hard part, let&amp;rsquo;s create our container&amp;rsquo;s file system and do the rest of the housekeeping&lt;/p&gt;
-
-&lt;h1 id=&#34;enter-the-namespace&#34;&gt;Enter the namespace&lt;/h1&gt;
-
-&lt;p&gt;Let&amp;rsquo;s enter the configured network namespace:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;ip netns exec container bash
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;By executing this command, we only separate network namespace. Everything else is still shared with the parent process.
-That&amp;rsquo;s right, you can share one or many namespaces with other processes.&lt;/p&gt;
-
-&lt;p&gt;Now, let&amp;rsquo;s move forward and unshare other namespaces. The only namespace we will not unshare is user namespace, because it makes the whole configuration more complex and is it&amp;rsquo;s not necessary for our demonstrational purposes.&lt;/p&gt;
-
-&lt;p&gt;To unshare namespaces, we&amp;rsquo;ll be using &lt;code&gt;unshare&lt;/code&gt; command.
-Unshare command will detach from the namespaces specified by flags &lt;code&gt;-m&lt;/code&gt; (mount namespace), &lt;code&gt;-p&lt;/code&gt; (PID namespace), etcetera.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;unshare -m -p -i -f --mount-proc
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Let&amp;rsquo;s also mark mount point as private, so non of our mounts leak:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;mount / --make-rprivate
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We will install busybox chroot environment using the following gist posted by github user &amp;ldquo;weakish&amp;rdquo;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;curl -O https://gist.githubusercontent.com/weakish/927135/raw/40b870c8702c52a8d0ea6d3d689e45228055c7c3/busyroot.sh  &amp;amp;&amp;amp; chmod +x busyroot.sh
-./busyroot.sh init
-chroot /chroot/ bin/sh
-busybox install
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The above gist creates a chroot environment, bootstraps it with need devices and files, nothing too fancy.&lt;/p&gt;
-
-&lt;p&gt;After executing the commands, we have a fully functioning isolated process with network access and own processes tree.
-If you run:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;echo $$
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;You should see 1, it means that our process has process id 1 on the system.&lt;/p&gt;
-
-&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
-
-&lt;p&gt;Hopefully, this post has shed some light on the mystery of containers.
-We learned to unshare namespaces, create network configuration that allows access to the internet and create a secure environment isolated from the global state of the host.&lt;/p&gt;
-</description>
+      <description>The advent of containers Containers seem to have turned the industry upside down and marching full ahead to become the dominant way of shipping software. To uninitiated mortals, Docker seems to be kind of a strange child. Where does it come from, what&amp;rsquo;s it good at? It looks like VM, but everyone keeps telling us not to compare it to VMs. Even though it gained a massive traction, it still has a long way to go to be a de-facto standard every developer should be familiar with.</description>
     </item>
     
   </channel>
