@@ -17,8 +17,9 @@
       <pubDate>Fri, 01 Sep 2017 00:00:00 +0000</pubDate>
       
       <guid>http://www.itchyknowsdevs.me/blog/deploying-letsencrypt-ssl-enabled-app-with-kubernetes-on-gce/</guid>
-      <description>Deploying Clojure with SSL support using Kubernetes and LetsEncrypt and GCE Everyone who has ever dealt with enabling SSL support on their web site to enable that green lock in url bar should be familiar with how frustrating the experience is.
-Not only it&amp;rsquo;s cumbersume to manage certificates and deploying them to the webserver, but it also costs quite a bit of money to get the certificate from so-called CA - Certificate Authority.</description>
+      <description>Everyone who has ever dealt with enabling SSL support on their web site to enable that green lock in url bar should be familiar with how frustrating the experience is.
+Not only it&amp;rsquo;s cumbersume to manage certificates and deploying them to the webserver, but it also costs quite a bit of money to get the certificate from so-called CA - Certificate Authority.
+CAs are &amp;ldquo;trusted&amp;rdquo; entities who issue certificates to website owners with seal of approval on the certificate, that says the certificate owner is verified and are who they claim to be.</description>
     </item>
     
     <item>
