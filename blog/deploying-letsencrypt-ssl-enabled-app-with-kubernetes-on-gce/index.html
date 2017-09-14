@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Developer">
+
+<base href="http://www.itchyknowsdevs.me/">
+<title>
+
+
+     Deploying LetsEncrypt SSL enabled app with Kubernetes on GCE 
+
+</title>
+<link rel="canonical" href="http://www.itchyknowsdevs.me/blog/deploying-letsencrypt-ssl-enabled-app-with-kubernetes-on-gce/">
+
+
+<script type="text/javascript">
+    var baseURL = 'http:\/\/www.itchyknowsdevs.me\/';
+    var host = baseURL.substring(0, baseURL.length - 1).replace(/\//g, '');
+    if ((host === window.location.host) && (window.location.protocol !== 'https:')) {
+        window.location.protocol = 'https:';
+    }
+</script>
+
+
+
+
+
+<link rel="stylesheet" href="http://www.itchyknowsdevs.me/css/reset.css">
+<link rel="stylesheet" href="http://www.itchyknowsdevs.me/css/pygments.css">
+<link rel="stylesheet" href="http://www.itchyknowsdevs.me/css/main.css">
+
+
+    <link rel="stylesheet" href="http://www.itchyknowsdevs.me/css/override.css">
+
+
+
+
+
+<link rel="shortcut icon"
+
+    href="http://www.itchyknowsdevs.me/img/leaf.ico"
+
+>
+
+
+
+</head>
+
+
+<body lang="en">
+
+<section class="header"> 
+    <div class="container">
+        <div class="content">
+            <a href="http://www.itchyknowsdevs.me/"><div class="name">Aleksandr Guljajev</div></a>
+            <nav>
+                <ul>
+                    <a href="http://www.itchyknowsdevs.me/blog/"><li>Blog</li></a>
+                    <a href="http://www.itchyknowsdevs.me/about/"><li>About</li></a>
+                    <a href="http://www.itchyknowsdevs.me/code/"><li>Code</li></a>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</section>
+
+<section class="icons">
+    <div class="container">
+        <div class="content">
+
+        
+            <a href="//github.com/alex-glv" target="_blank">
+                <i class="icon ion-social-github"></i>
+            </a>
+        
+        
+        
+            <a href="//twitter.com/jaleks_" target="_blank">
+                <i class="icon ion-social-twitter"></i>
+            </a>
+        
+
+        
+            <a href="//linkedin.com/in/aleksadr-guljajev-a17941a6" target="_blank">
+                <i class="icon ion-social-linkedin"></i>
+            </a>
+        
+
+        
+
+        
+
+        
+        </div>
+    </div>
+</section>
+
+
+<section class="main post non-narrow zero-top-spacing">
+    <div class="container">
+        <div class="content">
+            <div class="front-matter">
+                <div class="title-container">
+                    <div class="page-heading">
+
+    Deploying LetsEncrypt SSL enabled app with Kubernetes on GCE
+
+</div>
+
+                    <div class="initials"><a href="http://www.itchyknowsdevs.me/">ag</a></div>
+                </div>
+                <div class="meta">
+                    <div class="date" title="Fri Sep 1 2017 00:00:00 UTC">Sep 1, 2017</div>
+                    <div class="reading-time"><div class="middot"></div>3 minutes read</div>
+                </div>
+            </div>
+            <div class="markdown">
+                
+
+<h1 id="deploying-clojure-with-ssl-support-using-kubernetes-and-letsencrypt-and-gce">Deploying Clojure with SSL support using Kubernetes and LetsEncrypt and GCE</h1>
+
+<p>Everyone who has ever dealt with enabling SSL support on their web site to enable that green lock in url bar should be familiar with how frustrating the experience is.</p>
+
+<p>Not only it&rsquo;s cumbersume to manage certificates and deploying them to the webserver, but it also costs quite a bit of money to get the certificate from so-called CA - Certificate Authority.</p>
+
+<p>CAs are &ldquo;trusted&rdquo; entities who issue certificates to website owners with seal of approval on the certificate, that says the certificate owner is verified and are who they claim to be. CAs certificates are installed in every major browser to &ldquo;trust&rdquo; implicitly all cerificates signed by them.</p>
+
+<p>If you refused to pay money for the signed certificates, browsers would punish your website by showing distrust to the user who navigates to it.</p>
+
+<p>Everything changed since LetsEncrypt came out. Free of charge signed certificates supported by all major browsers, with API support to programmatically obtain certificates online when they expire.</p>
+
+<p>This opened the Pandora&rsquo;s Box and in 2017 it&rsquo;s much easier to have secure website installation with signed certificate.</p>
+
+<p>Let&rsquo;s explore now we can automate this if we deploy our app with Docker and Kubernetes</p>
+
+<h2 id="credits">Credits</h2>
+
+<p>This implementation would not be possible without the awesome open source project <a href="https://github.com/jetstack/kube-lego">kube-lego</a> that implements LetsEncrypt API in Kubernetes.</p>
+
+<h2 id="configuration">Configuration</h2>
+
+<p>Kubernetes configuration can be tricky sometimes to get right.
+It&rsquo;s encouraged to split the declaration in multiple files, with the encapsulated responsibilities.</p>
+
+<p>Kubernetes has the notion of Ingress, an entrance into the app.
+In ingress we will specify our hostname and path to the challenge file for LetsEncrypt to verify the domain ownership.</p>
+
+<pre><code>apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: boards-io-ingress
+  annotations:
+    kubernetes.io/tls-acme: &quot;true&quot;
+    kubernetes.io/ingress.class: &quot;gce&quot;
+spec:
+  tls:
+  - hosts:
+    - my-app-domain.com
+    secretName: app-tls
+  rules:
+  - host: my-app-domain.com
+    http:
+      paths:
+      - path: /.well-known/acme-challenge
+        backend:
+          serviceName: kube-lego-gce
+          servicePort: 8080
+  - host: treesie.io
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: svc-name
+          servicePort: 80
+</code></pre>
+
+<p>Next, we&rsquo;ll specify kube-lego configuration container. The container will always be running and polling the certificate. If it expired or not configured, it will contact LetsEncrypt and try to obtain the certificate.</p>
+
+<p>Please refer to the <a href="https://github.com/alex-glv/boards-io/blob/master/deployment/k8s-cert-proxy.yaml">example from the reference app</a></p>
+
+<p>The rest is easy, we&rsquo;ll only have to configure our service front-end container and deploy that to GCE.</p>
+
+<p>You can follow many of those examples online.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>I have created a <a href="https://github.com/alex-glv/boards-io/tree/master/deployment">demo app</a> that used the strategy to enable SSL support.
+Use that as a reference material on how to enable SSL support on your Kubernetes deployment on Google Cloud Engine and LetsEncrypt.</p>
+
+<p>Good luck!</p>
+
+                <br>
+                <p><a href="http://www.itchyknowsdevs.me/blog/">Back to posts</a></p>
+            </div>
+            <br>
+            <div class="disqus">
+                
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+</body>
+</html>
+
