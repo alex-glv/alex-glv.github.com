@@ -6,10 +6,20 @@
     <description>Recent content in Blog on Aleksandr Guljajev</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
-    <lastBuildDate>Fri, 19 May 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 01 Sep 2017 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="http://www.itchyknowsdevs.me/blog/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Deploying LetsEncrypt SSL enabled app with Kubernetes on GCE</title>
+      <link>http://www.itchyknowsdevs.me/blog/deploying-letsencrypt-ssl-enabled-app-with-kubernetes-on-gce/</link>
+      <pubDate>Fri, 01 Sep 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.itchyknowsdevs.me/blog/deploying-letsencrypt-ssl-enabled-app-with-kubernetes-on-gce/</guid>
+      <description>Deploying Clojure with SSL support using Kubernetes and LetsEncrypt and GCE Everyone who has ever dealt with enabling SSL support on their web site to enable that green lock in url bar should be familiar with how frustrating the experience is.
+Not only it&amp;rsquo;s cumbersume to manage certificates and deploying them to the webserver, but it also costs quite a bit of money to get the certificate from so-called CA - Certificate Authority.</description>
+    </item>
     
     <item>
       <title>Om.next and what&#39;s next?</title>
@@ -19,16 +29,6 @@
       <guid>http://www.itchyknowsdevs.me/blog/om.next-and-whats-next/</guid>
       <description>I enjoy writing Clojure, a lot. I&amp;rsquo;ve written Javascript, PHP, Python, C, and Go. Clojure is by far the most satisfying language to write code and reason in. I keep coming back to it. Whether it&amp;rsquo;s the kind of people it attracts, alien ideas it encourages implementing things in, or simply personal biased preference, I don&amp;rsquo;t know.
 That also extends to Clojurescript. Clojurescript and Clojure have been my first combo in writing front and back-end apps.</description>
-    </item>
-    
-    <item>
-      <title>Deploying LetsEncrypt SSL enabled app with Kubernetes on GCE</title>
-      <link>http://www.itchyknowsdevs.me/blog/deploying-letsencrypt-ssl-enabled-app-with-kubernetes-on-gce/</link>
-      <pubDate>Wed, 10 Aug 2016 00:00:00 +0000</pubDate>
-      
-      <guid>http://www.itchyknowsdevs.me/blog/deploying-letsencrypt-ssl-enabled-app-with-kubernetes-on-gce/</guid>
-      <description>Deploying Clojure with SSL support using Kubernetes and LetsEncrypt and GCE Everyone who has ever dealt with enabling SSL support on their web site to enable that green lock in url bar should be familiar with how frustrating the experience is.
-Not only it&amp;rsquo;s cumbersume to manage certificates and deploying them to the webserver, but it also costs quite a bit of money to get the certificate from so-called CA - Certificate Authority.</description>
     </item>
     
     <item>

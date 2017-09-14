@@ -3,13 +3,13 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://www.itchyknowsdevs.me/blog/om.next-and-whats-next/</loc>
-    <lastmod>2017-05-19T00:00:00+00:00</lastmod>
+    <loc>http://www.itchyknowsdevs.me/blog/deploying-letsencrypt-ssl-enabled-app-with-kubernetes-on-gce/</loc>
+    <lastmod>2017-09-01T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.itchyknowsdevs.me/blog/deploying-letsencrypt-ssl-enabled-app-with-kubernetes-on-gce/</loc>
-    <lastmod>2016-08-10T00:00:00+00:00</lastmod>
+    <loc>http://www.itchyknowsdevs.me/blog/om.next-and-whats-next/</loc>
+    <lastmod>2017-05-19T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -66,13 +66,13 @@
   
   <url>
     <loc>http://www.itchyknowsdevs.me/</loc>
-    <lastmod>2017-05-19T00:00:00+00:00</lastmod>
+    <lastmod>2017-09-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://www.itchyknowsdevs.me/blog/</loc>
-    <lastmod>2017-05-19T00:00:00+00:00</lastmod>
+    <lastmod>2017-09-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
