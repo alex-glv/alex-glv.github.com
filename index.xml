@@ -22,6 +22,16 @@ That also extends to Clojurescript. Clojurescript and Clojure have been my first
     </item>
     
     <item>
+      <title>Deploying LetsEncrypt SSL enabled app with Kubernetes on GCE</title>
+      <link>http://www.itchyknowsdevs.me/blog/deploying-letsencrypt-ssl-enabled-app-with-kubernetes-on-gce/</link>
+      <pubDate>Wed, 10 Aug 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.itchyknowsdevs.me/blog/deploying-letsencrypt-ssl-enabled-app-with-kubernetes-on-gce/</guid>
+      <description>Deploying Clojure with SSL support using Kubernetes and LetsEncrypt and GCE Everyone who has ever dealt with enabling SSL support on their web site to enable that green lock in url bar should be familiar with how frustrating the experience is.
+Not only it&amp;rsquo;s cumbersume to manage certificates and deploying them to the webserver, but it also costs quite a bit of money to get the certificate from so-called CA - Certificate Authority.</description>
+    </item>
+    
+    <item>
       <title>Refactoring business-critical PHP application with RabbitMQ</title>
       <link>http://www.itchyknowsdevs.me/blog/refactoring-business-critical-php-application-with-rabbitmq/</link>
       <pubDate>Sat, 06 Aug 2016 00:00:00 +0000</pubDate>
